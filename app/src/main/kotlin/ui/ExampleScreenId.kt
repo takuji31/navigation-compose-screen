@@ -7,13 +7,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigate
+import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.navigation.rememberScreenNavController
 import jp.takuji31.compose.screengenerator.annotation.Argument
 import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
 import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
 import jp.takuji31.compose.screengenerator.annotation.Route
 
-@AutoScreenId("ExampleScreen")
+abstract class MyScreen<S : Enum<*>> : Screen<S>
+
+@AutoScreenId("ExampleScreen", screenBaseClass = MyScreen::class)
 enum class ExampleScreenId {
     @Route("/", deepLinks = ["https://takuji31.jp/compose-navigation/"])
     Home,

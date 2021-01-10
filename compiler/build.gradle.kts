@@ -11,8 +11,12 @@ java {
 
 dependencies {
     implementation(project(":annotation"))
+    implementation(project(":common"))
     implementation("com.google.auto:auto-common:0.11")
     implementation("com.squareup:kotlinpoet:1.7.2")
     implementation("com.google.auto.service:auto-service:1.0-rc7")
+    implementation("com.squareup:kotlinpoet-metadata:1.7.2")
+    implementation("com.squareup:kotlinpoet-metadata-specs:1.7.2")
+    implementation("com.squareup:kotlinpoet-classinspector-elements:1.7.2")
     kapt("com.google.auto.service:auto-service:1.0-rc7")
 }

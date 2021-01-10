@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    api(project(":common"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
 
@@ -60,4 +61,13 @@ dependencies {
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:1.0.0-alpha04")
+
+    androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
+    androidTestImplementation("junit:junit:4.13.1")
+    androidTestImplementation("androidx.test:rules:1.3.0")
+    androidTestImplementation("androidx.test:runner:1.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.ext:truth:1.3.0")
+    androidTestImplementation("com.google.truth:truth:1.1")
+
 }

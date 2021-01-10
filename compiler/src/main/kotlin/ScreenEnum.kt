@@ -20,6 +20,8 @@ import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
 data class ScreenEnum(
     val enumClassName: ClassName,
     val screenClassName: ClassName,
+    val screenBaseClassName: ClassName,
+    val screenBaseClassIsInterface: Boolean,
     val elements: List<ScreenEnumValue>,
 ) {
     private val composeBuilderClassName by lazy {
@@ -35,8 +37,15 @@ data class ScreenEnum(
             ParameterSpec.builder("screenId", enumClassName).build()
         val spec = TypeSpec.classBuilder(screenClassName)
             .addModifiers(KModifier.SEALED)
+            .apply {
+                val baseTypeName = screenBaseClassName.parameterizedBy(enumClassName)
+                if (screenBaseClassIsInterface) {
+                    addSuperinterface(baseTypeName)
+                } else {
+                    superclass(baseTypeName)
+                }
+            }
             .addSuperinterface(Parcelable)
-            .addSuperinterface(BaseScreen.parameterizedBy(enumClassName))
             .primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter(
@@ -69,8 +78,19 @@ data class ScreenEnum(
                         enumClassName.member(value.name),
                     )
 
-                val routeProperty = PropertySpec.builder("route", STRING, KModifier.OVERRIDE)
+                builder
+                    .addProperty(
+                        PropertySpec
+                            .builder("route", STRING, KModifier.OVERRIDE)
+                            .getter(
+                                FunSpec.getterBuilder().addCode("return screenId.route").build(),
+                            )
+                            .build(),
+                    )
+
                 if (value.hasArgs) {
+                    val parameterizedRouteProperty =
+                        PropertySpec.builder("parameterizedRoute", STRING, KModifier.OVERRIDE)
                     val constructor = FunSpec.constructorBuilder()
                     val properties = mutableListOf<PropertySpec.Builder>()
                     var route = value.annotation.route
@@ -90,17 +110,12 @@ data class ScreenEnum(
 
                     builder.primaryConstructor(constructor.build())
                     builder.addProperties(properties.map { it.build() })
-                    routeProperty.getter(
+                    parameterizedRouteProperty.getter(
                         FunSpec.getterBuilder().addCode("return %P", route)
                             .build(),
                     )
-                } else {
-                    routeProperty.getter(
-                        FunSpec.getterBuilder().addCode("return screenId.route")
-                            .build(),
-                    )
+                    builder.addProperty(parameterizedRouteProperty.build())
                 }
-                builder.addProperty(routeProperty.build())
                 builder.build()
             },
         )
