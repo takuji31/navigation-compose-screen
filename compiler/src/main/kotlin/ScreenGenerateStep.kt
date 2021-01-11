@@ -11,6 +11,10 @@ import com.squareup.kotlinpoet.metadata.isInterface
 import com.squareup.kotlinpoet.metadata.isOpen
 import com.squareup.kotlinpoet.metadata.toImmutableKmClass
 import jp.takuji31.compose.navigation.Screen
+import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
+import jp.takuji31.compose.navigation.compiler.model.ScreenClass
+import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
+import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
 import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
 import jp.takuji31.compose.screengenerator.annotation.Route
 import javax.annotation.processing.ProcessingEnvironment
@@ -35,13 +39,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                 return@forEach
             }
 
-            var enclosing = element
-            while (enclosing.kind != ElementKind.PACKAGE) {
-                enclosing = enclosing.enclosingElement
-            }
-            val packageElement: PackageElement = enclosing as PackageElement
-
-            val packageName = packageElement.qualifiedName.toString()
+            val packageName = getPackageName(element)
             val annotation = element.getAnnotation(AutoScreenId::class.java)
 
             val screenBaseType = try {
@@ -84,38 +82,55 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             val fileSpec = FileSpec.builder(packageName, screenClassSimpleName)
             val enumClassName = ClassName(packageName, element.simpleName.toString())
 
-            val values = mutableListOf<ScreenEnumValue>()
-            element.enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.forEach {
-                val annotations = it.getAnnotationsByType(Route::class.java)
-                if (annotations.isEmpty()) {
-                    processingEnv.messager.printMessage(
-                        Diagnostic.Kind.ERROR,
-                        "${element.simpleName}.${it.simpleName} must have Screen annotation.",
-                    )
-                } else {
-                    val valueAnnotation = annotations.first()
-                    values += ScreenEnumValue(it.simpleName.toString(), valueAnnotation)
-                }
-            }
+            val routes =
+                element.enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.map {
+                    val annotations = it.getAnnotationsByType(Route::class.java)
+                    if (annotations.isEmpty()) {
+                        throw RuntimeException("${element.simpleName}.${it.simpleName} must have Screen annotation.")
+                    } else {
+                        val valueAnnotation = annotations.first()
+                        ScreenRoute(it.simpleName.toString(), valueAnnotation)
+                    }
+                }.toList()
 
-            val screenEnum = ScreenEnum(
-                enumClassName,
-                screenClassName,
-                ClassName.bestGuess(
-                    screenBaseClass.name.replace("/", "."),
-                ),
-                screenBaseClass.isInterface,
-                values.toList(),
+            val screenBaseClassName = ClassName.bestGuess(screenBaseClass.name.replace("/", "."))
+            val composeBuilderClassName = screenClassName.nestedClass("ComposeDestinationBuilder")
+
+            fileSpec.addType(
+                ScreenClass(
+                    screenClassName,
+                    enumClassName,
+                    screenBaseClassName,
+                    screenBaseClass.isInterface,
+                    composeBuilderClassName,
+                    routes,
+                ).typeSpec,
             )
 
-            fileSpec.addType(screenEnum.screenSpec)
-            fileSpec.addFunction(screenEnum.composeFunctionSpec)
-            fileSpec.addProperty(screenEnum.routeExtensionSpec)
-            fileSpec.addProperty(screenEnum.navArgsExtensionSpec)
-            fileSpec.addProperty(screenEnum.deepLinksExtensionSpec)
+            ScreenIdExtensions(
+                enumClassName,
+                routes,
+            ).propertySpecs.forEach { fileSpec.addProperty(it) }
+
+            fileSpec.addFunction(
+                ComposeBuilderFunction(
+                    screenClassName,
+                    composeBuilderClassName,
+                ).spec,
+            )
 
             fileSpec.build().writeTo(processingEnv.filer)
         }
         return mutableSetOf()
+    }
+
+    private fun getPackageName(element: Element): String {
+        var enclosing = element
+        while (enclosing.kind != ElementKind.PACKAGE) {
+            enclosing = enclosing.enclosingElement
+        }
+        val packageElement: PackageElement = enclosing as PackageElement
+
+        return packageElement.qualifiedName.toString()
     }
 }
