@@ -1,4 +1,4 @@
-package jp.takuji31.compose.navigation.compiler
+package jp.takuji31.compose.navigation.compiler.model
 
 import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.FLOAT

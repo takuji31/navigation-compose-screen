@@ -1,7 +1,6 @@
 package jp.takuji31.compose.navigation.compiler.model
 
 import com.squareup.kotlinpoet.asTypeName
-import jp.takuji31.compose.navigation.compiler.Arg
 import jp.takuji31.compose.navigation.compiler.toCamelCase
 import jp.takuji31.compose.navigation.compiler.toLowerCamelCase
 import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
