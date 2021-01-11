@@ -23,7 +23,7 @@ data class ComposeBuilderFunction(
                 )
                     .build(),
             )
-        spec.addStatement("%T(this).apply(builder)", composeBuilderClassName)
+        spec.addStatement("return %T(this).builder()", composeBuilderClassName)
         spec.build()
     }
 }
