@@ -1,6 +1,7 @@
 package jp.takuji31.compose.navigation
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -32,6 +33,21 @@ class ScreenNavController(val navController: NavHostController) {
                 _currentScreen.value = argsScreen
             }
             onDestinationChanged = null
+        }
+    }
+
+    internal fun setFirstScreen(firstScreen: Screen<*>) {
+        val currentBackStackEntry =
+            checkNotNull(navController.currentBackStackEntry) { "ScreenNavController.setFirstScreen should not call before creating graph" }
+        val arguments = checkNotNull(currentBackStackEntry.arguments)
+        val route = arguments.get(KEY_ROUTE)
+        val argumentScreen = arguments.get(KEY_SCREEN)
+        if (currentScreen.value == null && argumentScreen == null && route == firstScreen.parameterizedRoute) {
+            arguments.putParcelable(KEY_SCREEN, firstScreen as Parcelable)
+            _currentScreen.value = firstScreen
+        }
+        if (currentScreen.value == null) {
+            Log.w("ScreenNavController", "Something's wrong! Current screen not found : $route")
         }
     }
 
