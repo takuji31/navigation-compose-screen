@@ -30,6 +30,7 @@ class ScreenNavController(val navController: NavHostController) {
                 args.putParcelable(KEY_SCREEN, newScreen as Parcelable)
                 _currentScreen.value = newScreen
             } else if (argsScreen != null) {
+                // Restore state, BackStack popped etc.
                 _currentScreen.value = argsScreen
             }
             onDestinationChanged = null
