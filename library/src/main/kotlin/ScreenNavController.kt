@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class ScreenNavController(val navController: NavHostController) {
-    private val _currentScreen = MutableStateFlow<Screen<out Enum<*>>?>(null)
-    val currentScreen: StateFlow<Screen<out Enum<*>>?>
+    private val _currentScreen = MutableStateFlow<Screen<Enum<*>>?>(null)
+    val currentScreen: StateFlow<Screen<Enum<*>>?>
         get() = _currentScreen
 
     private var onDestinationChanged: ((route: String) -> Unit)? = null
@@ -25,7 +25,7 @@ class ScreenNavController(val navController: NavHostController) {
         }
     }
 
-    fun navigate(screen: Screen<out Enum<*>>, popUpTo: String? = null, inclusive: Boolean = false) {
+    fun navigate(screen: Screen<Enum<*>>, popUpTo: String? = null, inclusive: Boolean = false) {
         onDestinationChanged = {
             if (it == screen.parameterizedRoute) {
                 _currentScreen.value = screen

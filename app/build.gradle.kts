@@ -17,6 +17,8 @@ android {
         targetSdkVersion(30)
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+
+        multiDexEnabled = true
     }
 
     buildFeatures {
@@ -24,6 +26,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.txt")
@@ -32,6 +37,7 @@ android {
 
     sourceSets {
         getByName("main").java.srcDir("src/main/kotlin")
+        getByName("debug").java.srcDir("src/main/kotlin")
         getByName("test").java.srcDir("src/test/kotlin")
         getByName("androidTest").java.srcDir("src/androidTest/kotlin")
     }
@@ -44,6 +50,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         useIR = true
+    }
+
+    packagingOptions {
+        resources {
+            excludes.addAll(
+                listOf(
+                    "META-INF/AL2.0",
+                    "META-INF/LGPL2.1"
+                )
+            )
+        }
     }
 
     composeOptions {
@@ -68,8 +85,6 @@ dependencies {
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:1.0.0-alpha04")
-
-    androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
 
     implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
@@ -96,6 +111,15 @@ dependencies {
     implementation(project(":library"))
     kapt(project(":compiler"))
 
+
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
+    androidTestImplementation("junit:junit:4.13.1")
+    androidTestImplementation("androidx.test:rules:1.3.0")
+    androidTestImplementation("androidx.test:runner:1.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.ext:truth:1.3.0")
+    androidTestImplementation("com.google.truth:truth:1.1")
+    androidTestImplementation("androidx.activity:activity-ktx:1.1.0")
 }
 
 kapt {

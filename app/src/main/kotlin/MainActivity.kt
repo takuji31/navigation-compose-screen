@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import jp.takuji31.compose.navigation.example.ui.Main
 import jp.takuji31.compose.navigation.example.ui.theme.NavigationComposeScreenGeneratorTheme
+import jp.takuji31.compose.navigation.rememberScreenNavController
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -19,7 +21,8 @@ class MainActivity : AppCompatActivity() {
             NavigationComposeScreenGeneratorTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    val navController = rememberScreenNavController()
+                    Main(navController = navController)
                 }
             }
         }

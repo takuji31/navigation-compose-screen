@@ -8,7 +8,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigate
 import jp.takuji31.compose.navigation.Screen
-import jp.takuji31.compose.navigation.rememberScreenNavController
+import jp.takuji31.compose.navigation.ScreenNavController
 import jp.takuji31.compose.screengenerator.annotation.Argument
 import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
 import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
@@ -53,8 +53,7 @@ fun NavController.navigateExampleScreen(
 }
 
 @Composable
-fun Main() {
-    val navController = rememberScreenNavController()
+fun Main(navController: ScreenNavController) {
     val currentScreen by navController.currentScreen.collectAsState()
     NavHost(
         navController = navController.navController,
