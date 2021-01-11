@@ -1,93 +1,65 @@
 package jp.takuji31.compose.navigation.example.ui
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.vector.ImageVector
 import jp.takuji31.compose.navigation.ScreenNavController
 import jp.takuji31.compose.navigation.ScreenNavHost
-
-private val topLevelScreens = setOf(
-    ExampleScreen.Home,
-    ExampleScreen.Settings,
-)
-
-private val ExampleScreen.title: String
-    get() = when (this) {
-        ExampleScreen.Home -> "Home"
-        is ExampleScreen.User -> "User $userId"
-        is ExampleScreen.Blog -> "Blog $blogId"
-        is ExampleScreen.Entry -> "Entry $entryId"
-        is ExampleScreen.Subscribers -> "Subscriber of blog $blogId"
-        is ExampleScreen.Ranking -> "${rankingType.name} ranking"
-        ExampleScreen.Settings -> "Settings"
-    }
-
-private val ExampleScreen.icon: ImageVector
-    get() = when (this) {
-        ExampleScreen.Home -> Icons.Default.Home
-        ExampleScreen.Settings -> Icons.Default.Settings
-        else -> TODO("Not supported")
-    }
+import jp.takuji31.compose.navigation.example.navViewModel
 
 @Composable
 fun Main(navController: ScreenNavController) {
     val currentScreen by navController.currentScreen.collectAsState()
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = (currentScreen as? ExampleScreen)?.title ?: "") })
-        },
-        bottomBar = {
-            BottomNavigation {
-                for (screen in topLevelScreens) {
-                    BottomNavigationItem(
-                        icon = { Icon(screen.icon) },
-                        selected = screen.screenId == currentScreen?.screenId,
-                        onClick = {
-                            navController.navigate(screen) {
-                                popUpTo(ExampleScreenId.Home) {
-                                    inclusive = screen == ExampleScreen.Home
+    ScreenNavHost(
+        navController = navController,
+        startScreen = ExampleScreen.Home,
+    ) {
+        val onBottomSheetItemClicked: (ExampleScreen) -> Unit = { screen ->
+            navController.navigate(screen) {
+                popUpTo(ExampleScreenId.Home) { inclusive = screen == ExampleScreen.Home }
+            }
+        }
+        examplescreenComposable {
+            home { screen ->
+                val viewModel = navViewModel<HomeViewModel>()
+                val state by viewModel.state.collectAsState()
+                BlogScaffold(
+                    currentScreen = screen,
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = screen.title) },
+                            actions = {
+                                IconButton(
+                                    onClick = { viewModel.reload() },
+                                    enabled = state !is HomeViewModel.State.Loading,
+                                ) {
+                                    Icon(Icons.Default.Refresh)
                                 }
-                            }
-                        },
-                        label = { Text(text = screen.title) },
-                    )
+                            },
+                        )
+                    },
+                    onBottomSheetItemClicked = onBottomSheetItemClicked,
+                ) {
+                    val blogs = (state as? HomeViewModel.State.Loaded)?.blogs
+                    Home(blogs) {
+                        navController.navigate(ExampleScreen.Blog(it.id))
+                    }
                 }
             }
-        },
-    ) {
-        ScreenNavHost(
-            navController = navController,
-            startScreen = ExampleScreen.Home,
-        ) {
-            examplescreenComposable {
-                home {
-                    Text(text = "This is Home")
-                }
-                user {
+            blog {
 
-                }
-                blog {
+            }
+            entry {
 
-                }
-                entry {
-
-                }
-                subscribers {
-
-                }
-                settings {
-                    Text(text = "This is settings")
-                }
+            }
+            settings {
+                Text(text = "This is settings")
             }
         }
     }

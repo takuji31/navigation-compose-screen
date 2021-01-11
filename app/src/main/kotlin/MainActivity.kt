@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Providers
 import androidx.compose.ui.platform.setContent
+import androidx.hilt.lifecycle.HiltViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import jp.takuji31.compose.navigation.example.ui.Main
 import jp.takuji31.compose.navigation.example.ui.theme.NavigationComposeScreenGeneratorTheme
@@ -16,10 +18,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NavigationComposeScreenGeneratorTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    val navController = rememberScreenNavController()
-                    Main(navController = navController)
+                val navController = rememberScreenNavController()
+                Providers(
+                    AmbientApplication provides application,
+                    AmbientNavController provides navController.navController,
+                ) {
+                    ProvideNavigationViewModelFactoryMap(factory = defaultViewModelProviderFactory as HiltViewModelFactory) {
+                        Surface(color = MaterialTheme.colors.background) {
+                            Main(navController = navController)
+                        }
+                    }
                 }
             }
         }

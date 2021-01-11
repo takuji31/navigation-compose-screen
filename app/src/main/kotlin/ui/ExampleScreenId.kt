@@ -13,17 +13,11 @@ enum class ExampleScreenId {
     @Route("/", deepLinks = ["https://takuji31.jp/compose-navigation/"])
     Home,
 
-    @Route("/user/{userId}", arguments = [Argument("userId", NavArgumentType.String)])
-    User,
-
-    @Route("/user/{userId}/blog/{blogId}")
+    @Route("/blog/{blogId}", arguments = [Argument("blogId", NavArgumentType.String)])
     Blog,
 
-    @Route("/user/{userId}/blog/{blogId}/entry/{entryId}")
+    @Route("/blog/{blogId}/entry/{entryId}")
     Entry,
-
-    @Route("/user/{userId}/blog/{blogId}/subscribers")
-    Subscribers,
 
     @Route(
         "/ranking/{rankingType}",
