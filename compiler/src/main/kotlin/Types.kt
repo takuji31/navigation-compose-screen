@@ -9,9 +9,12 @@ val NavGraphBuilder = ClassName.bestGuess("androidx.navigation.NavGraphBuilder")
 val NavType = ClassName.bestGuess("androidx.navigation.NavType")
 val NavDeepLink = ClassName.bestGuess("androidx.navigation.NavDeepLink")
 val NamedNavArgument = ClassName.bestGuess("androidx.navigation.compose.NamedNavArgument")
+val NavOptionsBuilder = ClassName.bestGuess("androidx.navigation.NavOptionsBuilder")
+val PopUpToBuilder = ClassName.bestGuess("androidx.navigation.PopUpToBuilder")
 
 val navArgument = MemberName("androidx.navigation.compose", "navArgument")
 val navDeepLink = MemberName("androidx.navigation", "navDeepLink")
+val popUpTo = MemberName("androidx.navigation.compose", "popUpTo")
 // endregion
 
 // region Compose
@@ -23,8 +26,4 @@ val composable = MemberName("androidx.navigation.compose", "composable")
 // region Parcelable
 val Parcelize = AnnotationSpec.builder(ClassName.bestGuess("kotlinx.parcelize.Parcelize")).build()
 val Parcelable = ClassName.bestGuess("android.os.Parcelable")
-// endregion
-
-// region Library
-val BaseScreen = ClassName.bestGuess("jp.takuji31.compose.navigation.Screen")
 // endregion

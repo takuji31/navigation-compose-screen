@@ -12,6 +12,7 @@ import com.squareup.kotlinpoet.metadata.isOpen
 import com.squareup.kotlinpoet.metadata.toImmutableKmClass
 import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
+import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
 import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
@@ -80,7 +81,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                 screenClassSimpleName,
             )
             val fileSpec = FileSpec.builder(packageName, screenClassSimpleName)
-            val enumClassName = ClassName(packageName, element.simpleName.toString())
+            val idClassName = ClassName(packageName, element.simpleName.toString())
 
             val routes =
                 element.enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.map {
@@ -99,7 +100,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             fileSpec.addType(
                 ScreenClass(
                     screenClassName,
-                    enumClassName,
+                    idClassName,
                     screenBaseClassName,
                     screenBaseClass.isInterface,
                     composeBuilderClassName,
@@ -108,7 +109,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             )
 
             ScreenIdExtensions(
-                enumClassName,
+                idClassName,
                 routes,
             ).propertySpecs.forEach { fileSpec.addProperty(it) }
 
@@ -118,6 +119,8 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                     composeBuilderClassName,
                 ).spec,
             )
+
+            fileSpec.addFunction(NavOptionsBuilderExtensions(idClassName).spec)
 
             fileSpec.build().writeTo(processingEnv.filer)
         }

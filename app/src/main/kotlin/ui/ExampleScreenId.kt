@@ -3,10 +3,7 @@ package jp.takuji31.compose.navigation.example.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.navigate
 import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.navigation.ScreenNavController
 import jp.takuji31.compose.screengenerator.annotation.Argument
@@ -43,13 +40,6 @@ enum class ExampleScreenId {
 @Suppress("EnumEntryName")
 enum class RankingType {
     daily, monthly, total
-}
-
-fun NavController.navigateExampleScreen(
-    screen: ExampleScreen,
-    builder: NavOptionsBuilder.() -> Unit = {},
-) {
-    navigate(screen.route, builder)
 }
 
 @Composable
