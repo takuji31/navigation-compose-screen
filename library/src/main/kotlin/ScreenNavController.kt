@@ -20,7 +20,7 @@ class ScreenNavController(val navController: NavHostController) {
     private var onDestinationChanged: ((route: String) -> Screen<*>?)? = null
 
     init {
-        navController.addOnDestinationChangedListener { _, destination, args ->
+        navController.addOnDestinationChangedListener { _, _, args ->
             checkNotNull(args)
             val route = args[KEY_ROUTE] as String
             val argsScreen = args[KEY_SCREEN] as? Screen<*>
