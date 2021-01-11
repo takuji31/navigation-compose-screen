@@ -1,4 +1,4 @@
-package jp.takuji31.compose.navigation.example.ui
+package jp.takuji31.compose.navigation.example.navigation
 
 import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.screengenerator.annotation.Argument

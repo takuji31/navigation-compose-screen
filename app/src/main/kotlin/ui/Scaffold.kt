@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 
 private val topLevelScreens = setOf(
     ExampleScreen.Home,

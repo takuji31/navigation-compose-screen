@@ -111,6 +111,8 @@ dependencies {
     implementation(project(":library"))
     kapt(project(":compiler"))
 
+    // Current limitation this library doesn't work correctly in single-module with kapt.correctErrorTypes=true
+    implementation(project(":navigation"))
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
     androidTestImplementation("junit:junit:4.13.1")

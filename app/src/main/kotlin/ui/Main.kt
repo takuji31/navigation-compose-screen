@@ -12,6 +12,10 @@ import androidx.compose.runtime.getValue
 import jp.takuji31.compose.navigation.ScreenNavController
 import jp.takuji31.compose.navigation.ScreenNavHost
 import jp.takuji31.compose.navigation.example.navViewModel
+import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
+import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
+import jp.takuji31.compose.navigation.example.navigation.examplescreenComposable
+import jp.takuji31.compose.navigation.example.navigation.popUpTo
 
 @Composable
 fun Main(navController: ScreenNavController) {

@@ -9,7 +9,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation.compose.NavHost
 import jp.takuji31.compose.navigation.ScreenNavController
-import jp.takuji31.compose.navigation.example.ui.MyScreen
+import jp.takuji31.compose.navigation.example.navigation.MyScreen
 import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
 import jp.takuji31.compose.screengenerator.annotation.Route
 
