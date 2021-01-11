@@ -13,7 +13,6 @@ import com.squareup.kotlinpoet.metadata.toImmutableKmClass
 import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
 import jp.takuji31.compose.screengenerator.annotation.Route
-import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -115,9 +114,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             fileSpec.addProperty(screenEnum.navArgsExtensionSpec)
             fileSpec.addProperty(screenEnum.deepLinksExtensionSpec)
 
-            val dest = processingEnv.options["kapt.kotlin.generated"]
-
-            fileSpec.build().writeTo(File(dest))
+            fileSpec.build().writeTo(processingEnv.filer)
         }
         return mutableSetOf()
     }
