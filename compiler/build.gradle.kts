@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     id("kotlin")
     kotlin("kapt")
+    `maven-publish`
 }
 
 java {

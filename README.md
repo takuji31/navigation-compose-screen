@@ -117,7 +117,7 @@ Add dependencies
 ```groovy
 dependencies {
     implementation("com.github.takuji31.navigation-compose-screen:navigation-compose-screen:0.10")
-    kapt("com.github.takuji31.navigation-compose-screen:navigation-compose-screen-compiler:0.10")
+    kapt("com.github.takuji31.navigation-compose-screen:compiler:0.10")
 }
 ```
 

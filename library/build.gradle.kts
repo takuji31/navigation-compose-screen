@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    `maven-publish`
 }
 
 android {
@@ -71,4 +72,18 @@ dependencies {
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
     androidTestImplementation("com.google.truth:truth:1.1")
 
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components.getByName("release"))
+
+                groupId = "com.github.takuji31.navigation-compose-screen"
+                artifactId = "navigation-compose-screen"
+                version = "0.10"
+            }
+        }
+    }
 }
