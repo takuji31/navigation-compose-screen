@@ -12,3 +12,15 @@ java {
 dependencies {
     implementation(project(":common"))
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["java"])
+
+            groupId = Publish.groupId
+            artifactId = "annotation"
+            version = Publish.version
+        }
+    }
+}

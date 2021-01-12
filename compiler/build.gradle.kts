@@ -23,3 +23,15 @@ dependencies {
     compileOnly("net.ltgt.gradle.incap:incap:0.3")
     kapt("net.ltgt.gradle.incap:incap-processor:0.3")
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["java"])
+
+            groupId = Publish.groupId
+            artifactId = "compiler"
+            version = Publish.version
+        }
+    }
+}

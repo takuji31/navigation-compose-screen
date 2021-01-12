@@ -12,3 +12,14 @@ java {
 dependencies {
 
 }
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["java"])
+
+            groupId = Publish.groupId
+            artifactId = "common"
+            version = Publish.version
+        }
+    }
+}
