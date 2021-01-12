@@ -1,11 +1,13 @@
 package jp.takuji31.compose.navigation.example.ui
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
@@ -37,12 +39,18 @@ val ExampleScreen.title: String
 @Composable
 fun BlogScaffold(
     currentScreen: ExampleScreen,
-    onBottomSheetItemClicked: (ExampleScreen) -> Unit,
-    topBar: @Composable () -> Unit = {},
+    title: String = currentScreen.title,
+    onBottomSheetItemClicked: (ExampleScreen) -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
     content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
     Scaffold(
-        topBar = topBar,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = title) },
+                actions = actions,
+            )
+        },
         bottomBar = {
             if (topLevelScreens.contains(currentScreen)) {
                 BottomNavigation {

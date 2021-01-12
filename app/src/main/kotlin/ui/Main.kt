@@ -1,11 +1,6 @@
 package jp.takuji31.compose.navigation.example.ui
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +12,7 @@ import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
 import jp.takuji31.compose.navigation.example.navigation.examplescreenComposable
 import jp.takuji31.compose.navigation.example.navigation.popUpTo
 
+@Suppress("EXPERIMENTAL_API_USAGE")
 @Composable
 fun Main(navController: ScreenNavController) {
     val currentScreen by navController.currentScreen.collectAsState()
@@ -33,37 +29,47 @@ fun Main(navController: ScreenNavController) {
             home { screen ->
                 val viewModel = navViewModel<HomeViewModel>()
                 val state by viewModel.state.collectAsState()
-                BlogScaffold(
-                    currentScreen = screen,
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(text = screen.title) },
-                            actions = {
-                                IconButton(
-                                    onClick = { viewModel.reload() },
-                                    enabled = state !is HomeViewModel.State.Loading,
-                                ) {
-                                    Icon(Icons.Default.Refresh)
-                                }
-                            },
+                Home(
+                    state = state,
+                    screen = screen,
+                    onBottomSheetItemClicked = onBottomSheetItemClicked,
+                    onReloadButtonClick = { viewModel.reload() },
+                    onItemClick = { navController.navigate(ExampleScreen.Blog(it.id)) },
+                )
+            }
+            blog { screen ->
+                val viewModel = navViewModel<BlogViewModel>()
+                val state by viewModel.state.collectAsState()
+                Blog(
+                    state = state,
+                    screen = screen,
+                    onReloadButtonClick = { viewModel.reload() },
+                    onItemClick = {
+                        navController.navigate(
+                            ExampleScreen.Entry(
+                                screen.blogId,
+                                it.id,
+                            ),
                         )
                     },
-                    onBottomSheetItemClicked = onBottomSheetItemClicked,
-                ) {
-                    val blogs = (state as? HomeViewModel.State.Loaded)?.blogs
-                    Home(blogs) {
-                        navController.navigate(ExampleScreen.Blog(it.id))
-                    }
-                }
-            }
-            blog {
-
+                )
             }
             entry {
-
+                val viewModel = navViewModel<EntryViewModel>()
+                val state by viewModel.state.collectAsState()
+                Entry(
+                    state = state,
+                    screen = it,
+                    onReloadButtonClick = { viewModel.reload() },
+                )
             }
-            settings {
-                Text(text = "This is settings")
+            settings { screen ->
+                BlogScaffold(
+                    currentScreen = screen,
+                    onBottomSheetItemClicked = { navController.navigate(it) },
+                ) {
+                    Text(text = "This is settings")
+                }
             }
         }
     }

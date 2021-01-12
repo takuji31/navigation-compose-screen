@@ -6,31 +6,23 @@ data class Blog(
     val entries: List<Entry>,
 ) {
     companion object {
-        val blogs = listOf(
-            Blog(
-                "1234",
-                "takuji31's Blog",
-                listOf(
-                ),
-            ),
-            Blog(
-                "2345",
-                "takuji32's Blog",
-                listOf(
-                ),
-            ),
-            Blog(
-                "3456",
-                "takuji33's Blog",
-                listOf(
-                ),
-            ),
-            Blog(
-                "5678",
-                "takuji34's Blog",
-                listOf(
-                ),
-            ),
-        )
+        val blogs: List<Blog> by lazy {
+            (1..4).map { num ->
+                val id = (num..num + 4).joinToString("")
+                Blog(
+                    id,
+                    "takuji3${num}'s Blog",
+                    listOf("first", "second", "latest")
+                        .mapIndexed { index, keyword ->
+                            Entry(
+                                "${id}_${index + 1}",
+                                "takuji3${num}'s Entry1",
+                                "This is takuji3${num}'s $keyword Entry",
+                            )
+                        }
+                        .reversed(),
+                )
+            }
+        }
     }
 }

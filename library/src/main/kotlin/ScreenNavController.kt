@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+public const val KEY_SCREEN = "jp.takuji31.compose.navigation.ScreenNavController:screen"
+
 class ScreenNavController(val navController: NavHostController) {
     private val _currentScreen = MutableStateFlow<Screen<Enum<*>>?>(null)
     val currentScreen: StateFlow<Screen<Enum<*>>?>
@@ -61,10 +63,6 @@ class ScreenNavController(val navController: NavHostController) {
 
     fun popBackStack() {
         navController.popBackStack()
-    }
-
-    companion object {
-        private const val KEY_SCREEN = "jp.takuji31.compose.navigation.ScreenNavController:screen"
     }
 }
 

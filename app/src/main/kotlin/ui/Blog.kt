@@ -10,45 +10,44 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import jp.takuji31.compose.navigation.example.model.Blog
+import jp.takuji31.compose.navigation.example.model.Entry
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 
 @Composable
-fun Home(
-    state: HomeViewModel.State,
-    screen: ExampleScreen.Home,
+fun Blog(
+    state: BlogViewModel.State,
+    screen: ExampleScreen.Blog,
     onReloadButtonClick: () -> Unit,
-    onBottomSheetItemClicked: (ExampleScreen) -> Unit,
-    onItemClick: (Blog) -> Unit,
+    onItemClick: (Entry) -> Unit,
 ) {
     BlogScaffold(
         currentScreen = screen,
         actions = {
             IconButton(
                 onClick = onReloadButtonClick,
-                enabled = state !is HomeViewModel.State.Loading,
+                enabled = state !is BlogViewModel.State.Loading,
             ) {
                 Icon(Icons.Default.Refresh)
             }
         },
-        onBottomSheetItemClicked = onBottomSheetItemClicked,
     ) {
-        val blogs = (state as? HomeViewModel.State.Loaded)?.blogs
-        if (blogs != null) {
+        val blog = (state as? BlogViewModel.State.Loaded)?.blog
+        val entries = blog?.entries
+        if (entries != null) {
             LazyColumn {
-                items(blogs) { blog ->
+                items(entries) { entry ->
                     ListItem(
                         icon = {
-                            Icon(Icons.Default.Person)
+                            Icon(Icons.Default.Book)
                         },
-                        modifier = Modifier.clickable(onClick = { onItemClick(blog) }),
+                        modifier = Modifier.clickable(onClick = { onItemClick(entry) }),
                     ) {
-                        Text(text = blog.title)
+                        Text(text = entry.title)
                     }
                 }
             }
