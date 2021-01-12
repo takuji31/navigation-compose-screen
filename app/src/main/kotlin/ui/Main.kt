@@ -9,7 +9,7 @@ import jp.takuji31.compose.navigation.ScreenNavHost
 import jp.takuji31.compose.navigation.example.navViewModel
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
-import jp.takuji31.compose.navigation.example.navigation.examplescreenComposable
+import jp.takuji31.compose.navigation.example.navigation.exampleScreenComposable
 import jp.takuji31.compose.navigation.example.navigation.popUpTo
 
 @Suppress("EXPERIMENTAL_API_USAGE")
@@ -25,7 +25,7 @@ fun Main(navController: ScreenNavController) {
                 popUpTo(ExampleScreenId.Home) { inclusive = screen == ExampleScreen.Home }
             }
         }
-        examplescreenComposable {
+        exampleScreenComposable {
             home { screen ->
                 val viewModel = navViewModel<HomeViewModel>()
                 val state by viewModel.state.collectAsState()

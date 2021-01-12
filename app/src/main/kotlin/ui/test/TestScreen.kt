@@ -31,12 +31,12 @@ fun TestingComposable(navController: ScreenNavController) {
         navController = navController.navController,
         startDestination = TestingScreenId.Home.route,
     ) {
-        val onHomeButtonClick = { navController.navigate(TestingScreen.Subscreen) }
+        val onHomeButtonClick = { navController.navigate(TestingScreen.SubScreen) }
         val onSubScreenButton1234Click =
             { navController.navigate(TestingScreen.Parameterized("1234")) }
         val onSubScreenButton5678Click =
             { navController.navigate(TestingScreen.Parameterized("1234")) }
-        testingscreenComposable {
+        testingScreenComposable {
             home {
                 Column {
                     Text(
@@ -51,7 +51,7 @@ fun TestingComposable(navController: ScreenNavController) {
                     }
                 }
             }
-            subscreen {
+            subScreen {
                 Column {
                     Text(
                         text = "This is SubScreen",
