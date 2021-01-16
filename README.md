@@ -4,7 +4,7 @@ Screen object support for navigation-compose
 ## Requirements
 
 - Android Gradle Plugin 7.0.0-alpha04 or later
-- Jetpack Compose 1.0.0-alpha09
+- Jetpack Compose 1.0.0-alpha010
 - navigation-compose 1.0.0-alpha04
 - minimum SDK version 23 (Android 6.0)
 
@@ -93,6 +93,8 @@ fun Main(navController: ScreenNavController) { // val navController = rememberSc
 
 
 ## Setup
+
+[![Release](https://jitpack.io/v/takuji31/navigation-compose-screen.svg)](https://jitpack.io/#takuji31/navigation-compose-screen)
 
 Add JitPack to your repositories
 ```groovy
