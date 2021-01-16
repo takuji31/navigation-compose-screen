@@ -1,6 +1,6 @@
 package jp.takuji31.compose.navigation.screen.annotation
 
-import jp.takuji31.compose.navigation.Screen
+import jp.takuji31.compose.navigation.screen.Screen
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)

@@ -4,13 +4,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import jp.takuji31.compose.navigation.ScreenNavController
-import jp.takuji31.compose.navigation.ScreenNavHost
 import jp.takuji31.compose.navigation.example.navViewModel
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
 import jp.takuji31.compose.navigation.example.navigation.exampleScreenComposable
 import jp.takuji31.compose.navigation.example.navigation.popUpTo
+import jp.takuji31.compose.navigation.screen.ScreenNavController
+import jp.takuji31.compose.navigation.screen.ScreenNavHost
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 @Composable

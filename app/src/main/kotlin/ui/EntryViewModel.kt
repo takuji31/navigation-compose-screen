@@ -5,12 +5,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import jp.takuji31.compose.navigation.KEY_SCREEN
 import jp.takuji31.compose.navigation.example.model.Blog
 import jp.takuji31.compose.navigation.example.model.Entry
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.repository.BlogRepository
 import jp.takuji31.compose.navigation.example.repository.EntryRepository
+import jp.takuji31.compose.navigation.screen.KEY_SCREEN
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

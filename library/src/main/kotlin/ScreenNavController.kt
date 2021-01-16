@@ -1,4 +1,4 @@
-package jp.takuji31.compose.navigation
+package jp.takuji31.compose.navigation.screen
 
 import android.os.Parcelable
 import android.util.Log

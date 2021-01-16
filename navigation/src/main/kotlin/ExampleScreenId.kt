@@ -1,6 +1,6 @@
 package jp.takuji31.compose.navigation.example.navigation
 
-import jp.takuji31.compose.navigation.Screen
+import jp.takuji31.compose.navigation.screen.Screen
 import jp.takuji31.compose.navigation.screen.annotation.Argument
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType

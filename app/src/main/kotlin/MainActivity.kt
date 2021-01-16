@@ -10,7 +10,7 @@ import androidx.hilt.lifecycle.HiltViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import jp.takuji31.compose.navigation.example.ui.Main
 import jp.takuji31.compose.navigation.example.ui.theme.NavigationComposeScreenGeneratorTheme
-import jp.takuji31.compose.navigation.rememberScreenNavController
+import jp.takuji31.compose.navigation.screen.rememberScreenNavController
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

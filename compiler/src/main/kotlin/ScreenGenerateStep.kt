@@ -10,12 +10,12 @@ import com.squareup.kotlinpoet.metadata.isAbstract
 import com.squareup.kotlinpoet.metadata.isInterface
 import com.squareup.kotlinpoet.metadata.isOpen
 import com.squareup.kotlinpoet.metadata.toImmutableKmClass
-import jp.takuji31.compose.navigation.Screen
 import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
 import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
 import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
+import jp.takuji31.compose.navigation.screen.Screen
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.Route
 import javax.annotation.processing.ProcessingEnvironment

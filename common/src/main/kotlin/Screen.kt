@@ -1,4 +1,4 @@
-package jp.takuji31.compose.navigation
+package jp.takuji31.compose.navigation.screen
 
 interface Screen<out ID : Enum<*>> {
     val screenId: ID

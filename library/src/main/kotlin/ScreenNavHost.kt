@@ -1,4 +1,4 @@
-package jp.takuji31.compose.navigation
+package jp.takuji31.compose.navigation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
