@@ -1,4 +1,4 @@
-package jp.takuji31.compose.screengenerator.annotation
+package jp.takuji31.compose.navigation.screen.annotation
 
 import jp.takuji31.compose.navigation.Screen
 import kotlin.reflect.KClass

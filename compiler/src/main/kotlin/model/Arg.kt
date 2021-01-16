@@ -6,7 +6,7 @@ import com.squareup.kotlinpoet.INT
 import com.squareup.kotlinpoet.LONG
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
-import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
+import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType
 
 data class Arg constructor(
     val name: String,

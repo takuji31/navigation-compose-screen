@@ -14,7 +14,7 @@ import jp.takuji31.compose.navigation.compiler.NavDeepLink
 import jp.takuji31.compose.navigation.compiler.NavType
 import jp.takuji31.compose.navigation.compiler.navArgument
 import jp.takuji31.compose.navigation.compiler.navDeepLink
-import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
+import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType
 
 data class ScreenIdExtensions(
     val idClassName: ClassName,
@@ -60,11 +60,26 @@ data class ScreenIdExtensions(
                             arg.name,
                             NavType,
                             when (type) {
-                                NavArgumentType.String -> MemberName(NavType, "StringType")
-                                NavArgumentType.Int -> MemberName(NavType, "IntType")
-                                NavArgumentType.Long -> MemberName(NavType, "LongType")
-                                NavArgumentType.Bool -> MemberName(NavType, "BoolType")
-                                NavArgumentType.Float -> MemberName(NavType, "FloatType")
+                                NavArgumentType.String -> MemberName(
+                                    NavType,
+                                    "StringType",
+                                )
+                                NavArgumentType.Int -> MemberName(
+                                    NavType,
+                                    "IntType",
+                                )
+                                NavArgumentType.Long -> MemberName(
+                                    NavType,
+                                    "LongType",
+                                )
+                                NavArgumentType.Bool -> MemberName(
+                                    NavType,
+                                    "BoolType",
+                                )
+                                NavArgumentType.Float -> MemberName(
+                                    NavType,
+                                    "FloatType",
+                                )
                                 NavArgumentType.Enum -> TODO()
                             },
                         )

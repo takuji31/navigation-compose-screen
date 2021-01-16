@@ -3,8 +3,8 @@ package jp.takuji31.compose.navigation.compiler.model
 import com.squareup.kotlinpoet.asTypeName
 import jp.takuji31.compose.navigation.compiler.toCamelCase
 import jp.takuji31.compose.navigation.compiler.toLowerCamelCase
-import jp.takuji31.compose.screengenerator.annotation.NavArgumentType
-import jp.takuji31.compose.screengenerator.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType
+import jp.takuji31.compose.navigation.screen.annotation.Route
 import javax.lang.model.type.MirroredTypeException
 
 data class ScreenRoute(

@@ -16,8 +16,8 @@ import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
 import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
-import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
-import jp.takuji31.compose.screengenerator.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
+import jp.takuji31.compose.navigation.screen.annotation.Route
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -27,7 +27,8 @@ import javax.tools.Diagnostic
 
 class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
     BasicAnnotationProcessor.Step {
-    override fun annotations(): MutableSet<String> = mutableSetOf(AutoScreenId::class.java.name)
+    override fun annotations(): MutableSet<String> =
+        mutableSetOf(AutoScreenId::class.java.name)
 
     @OptIn(KotlinPoetMetadataPreview::class)
     override fun process(elementsByAnnotation: ImmutableSetMultimap<String, Element>?): MutableSet<out Element> {
@@ -41,7 +42,8 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             }
 
             val packageName = getPackageName(element)
-            val annotation = element.getAnnotation(AutoScreenId::class.java)
+            val annotation =
+                element.getAnnotation(AutoScreenId::class.java)
 
             val screenBaseType = try {
                 processingEnv.elementUtils.getTypeElement(annotation.screenBaseClass.qualifiedName)
@@ -85,7 +87,8 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
 
             val routes =
                 element.enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.map {
-                    val annotations = it.getAnnotationsByType(Route::class.java)
+                    val annotations =
+                        it.getAnnotationsByType(Route::class.java)
                     if (annotations.isEmpty()) {
                         throw RuntimeException("${element.simpleName}.${it.simpleName} must have Screen annotation.")
                     } else {

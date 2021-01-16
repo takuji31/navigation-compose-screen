@@ -10,8 +10,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.navigation.compose.NavHost
 import jp.takuji31.compose.navigation.ScreenNavController
 import jp.takuji31.compose.navigation.example.navigation.MyScreen
-import jp.takuji31.compose.screengenerator.annotation.AutoScreenId
-import jp.takuji31.compose.screengenerator.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
+import jp.takuji31.compose.navigation.screen.annotation.Route
 
 @AutoScreenId("TestingScreen", screenBaseClass = MyScreen::class)
 enum class TestingScreenId {
