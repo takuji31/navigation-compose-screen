@@ -14,14 +14,23 @@ Provide type safe navigation to navigation-compose
 
 ```kotlin
 // screenBaseClass is optional
-@AutoScreenId("ExampleScreen", screenBaseClass = MyScreen::class)
+@AutoScreenId(
+    "ExampleScreen",
+    screenBaseClass = MyScreen::class,
+)
 enum class ExampleScreenId {
     // Deep Link support
-    @Route("/", deepLinks = ["https://takuji31.jp/compose-navigation/"])
+    @Route(
+        "/",
+        deepLinks = ["https://takuji31.jp/compose-navigation/"],
+    )
     Home,
 
     // arguments support
-    @Route("/blog/{blogId}", arguments = [Argument("blogId", NavArgumentType.String)])
+    @Route(
+        "/blog/{blogId}",
+        stringArguments = [StringArgument("blogId")],
+    )
     Blog,
 
     // auto argument type is String
@@ -30,8 +39,15 @@ enum class ExampleScreenId {
 
     // enum type arguments supported
     @Route(
-        "/ranking/{rankingType}",
-        arguments = [Argument("rankingType", NavArgumentType.Enum, RankingType::class)],
+        "/ranking/?rankingType={rankingType}",
+        enumArguments = [
+            EnumArgument(
+                "rankingType",
+                RankingType::class,
+                hasDefaultValue = true,
+                "daily",
+            ),
+        ],
     )
     Ranking,
 
@@ -118,8 +134,8 @@ plugins {
 Add dependencies
 ```groovy
 dependencies {
-    implementation("com.github.takuji31.navigation-compose-screen:navigation-compose-screen:0.10")
-    kapt("com.github.takuji31.navigation-compose-screen:compiler:0.10")
+    implementation("com.github.takuji31.navigation-compose-screen:navigation-compose-screen:+")
+    kapt("com.github.takuji31.navigation-compose-screen:compiler:+")
 }
 ```
 
