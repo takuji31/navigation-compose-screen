@@ -5,22 +5,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.staticAmbientOf
 import androidx.compose.ui.viewinterop.viewModel
-import androidx.hilt.lifecycle.HiltViewModelFactory
-import androidx.hilt.lifecycle.ViewModelAssistedFactory
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import dagger.hilt.android.internal.builders.ViewModelComponentBuilder
+import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
+import dagger.hilt.android.internal.lifecycle.HiltViewModelMap
+import javax.inject.Inject
 
 val AmbientViewModelProviderFactory = staticAmbientOf<ViewModelProvider.Factory>()
 val AmbientNavController = staticAmbientOf<NavController>()
 val AmbientApplication = staticAmbientOf<Application>()
-val AmbientViewModelFactoriesMap =
-    staticAmbientOf<Map<String, ViewModelAssistedFactory<out ViewModel>>>()
+val AmbientHiltDependencies = staticAmbientOf<HiltDependencies>()
 
 /**
- * from https://github.com/google/dagger/issues/2166#issuecomment-723775543
+ * Inspired from https://github.com/google/dagger/issues/2166#issuecomment-723775543
+ *
+ * TODO: waiting for hilt-navigation release https://github.com/google/dagger/issues/2166#issuecomment-761061463
  */
 @Composable
 inline fun <reified VM : ViewModel> navViewModel(
@@ -28,41 +31,38 @@ inline fun <reified VM : ViewModel> navViewModel(
     factory: ViewModelProvider.Factory? = AmbientViewModelProviderFactory.current,
 ): VM {
     val navController = AmbientNavController.current
+    val hiltDependencies = AmbientHiltDependencies.current
     val backStackEntry = navController.currentBackStackEntryAsState().value
     return if (backStackEntry != null) {
         // Hack for navigation viewModel
         val application = AmbientApplication.current
-        val viewModelFactories = AmbientViewModelFactoriesMap.current
-        val delegate =
+        val delegatedFactory =
             SavedStateViewModelFactory(application, backStackEntry, backStackEntry.arguments)
-        val hiltViewModelFactory = HiltViewModelFactory::class.java.declaredConstructors.first()
-            .newInstance(
-                backStackEntry,
-                backStackEntry.arguments,
-                delegate,
-                viewModelFactories,
-            ) as HiltViewModelFactory
+        val hiltViewModelFactory = HiltViewModelFactory(
+            backStackEntry,
+            backStackEntry.arguments,
+            hiltDependencies.viewModelInjectKeys,
+            delegatedFactory,
+            hiltDependencies.viewModelComponentBuilder,
+        )
         viewModel(key, hiltViewModelFactory)
     } else {
-        viewModel(key, factory)
+        return viewModel<VM>(key, factory)
     }
 }
 
 @Composable
-fun ProvideNavigationViewModelFactoryMap(
-    factory: HiltViewModelFactory,
+fun ProvideHiltViewModelFactoryParams(
+    hiltDependencies: HiltDependencies,
     content: @Composable () -> Unit,
 ) {
-    // Hack for navigation viewModel
-    val factories =
-        HiltViewModelFactory::class.java.getDeclaredField("mViewModelFactories")
-            .also { it.isAccessible = true }
-            .get(factory).let {
-                it as Map<String, ViewModelAssistedFactory<out ViewModel>>
-            }
-    Providers(
-        AmbientViewModelFactoriesMap provides factories,
-    ) {
-        content.invoke()
+
+    Providers(AmbientHiltDependencies provides hiltDependencies) {
+        content()
     }
 }
+
+class HiltDependencies @Inject constructor(
+    @HiltViewModelMap.KeySet val viewModelInjectKeys: Set<String>,
+    val viewModelComponentBuilder: ViewModelComponentBuilder,
+)

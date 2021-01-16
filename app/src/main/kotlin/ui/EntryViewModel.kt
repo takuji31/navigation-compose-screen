@@ -1,10 +1,9 @@
 package jp.takuji31.compose.navigation.example.ui
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.takuji31.compose.navigation.example.model.Blog
 import jp.takuji31.compose.navigation.example.model.Entry
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
@@ -14,11 +13,13 @@ import jp.takuji31.compose.navigation.screen.KEY_SCREEN
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EntryViewModel @ViewModelInject constructor(
+@HiltViewModel
+class EntryViewModel @Inject constructor(
     private val blogRepository: BlogRepository,
     private val entryRepository: EntryRepository,
-    @Assisted savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val screen: ExampleScreen.Entry = checkNotNull(savedStateHandle.get(KEY_SCREEN))
 

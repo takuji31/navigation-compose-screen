@@ -1,18 +1,19 @@
 package jp.takuji31.compose.navigation.example.ui
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.takuji31.compose.navigation.example.model.Blog
 import jp.takuji31.compose.navigation.example.repository.BlogRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val blogRepository: BlogRepository,
-    @Assisted savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
