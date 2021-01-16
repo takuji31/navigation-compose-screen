@@ -93,7 +93,11 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                         throw RuntimeException("${element.simpleName}.${it.simpleName} must have Screen annotation.")
                     } else {
                         val valueAnnotation = annotations.first()
-                        ScreenRoute(it.simpleName.toString(), valueAnnotation)
+                        ScreenRoute(
+                            processingEnv.elementUtils,
+                            it.simpleName.toString(),
+                            valueAnnotation,
+                        )
                     }
                 }.toList()
 

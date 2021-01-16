@@ -1,10 +1,10 @@
 package jp.takuji31.compose.navigation.example.navigation
 
 import jp.takuji31.compose.navigation.screen.Screen
-import jp.takuji31.compose.navigation.screen.annotation.Argument
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
-import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType
+import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
 import jp.takuji31.compose.navigation.screen.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.StringArgument
 
 abstract class MyScreen<S : Enum<*>> : Screen<S>
 
@@ -21,7 +21,7 @@ enum class ExampleScreenId {
 
     @Route(
         "/blog/{blogId}",
-        arguments = [Argument("blogId", NavArgumentType.String)],
+        stringArguments = [StringArgument("blogId")],
     )
     Blog,
 
@@ -29,8 +29,15 @@ enum class ExampleScreenId {
     Entry,
 
     @Route(
-        "/ranking/{rankingType}",
-        arguments = [Argument("rankingType", NavArgumentType.Enum, RankingType::class)],
+        "/ranking/?rankingType={rankingType}",
+        enumArguments = [
+            EnumArgument(
+                "rankingType",
+                RankingType::class,
+                hasDefaultValue = true,
+                "daily",
+            ),
+        ],
     )
     Ranking,
 

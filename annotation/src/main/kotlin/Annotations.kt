@@ -15,15 +15,95 @@ annotation class AutoScreenId(
 annotation class Route(
     val route: String,
     val deepLinks: Array<String> = [],
-    vararg val arguments: Argument = [],
+    val stringArguments: Array<StringArgument> = [],
+    val intArguments: Array<IntArgument> = [],
+    val longArguments: Array<LongArgument> = [],
+    val booleanArguments: Array<BooleanArgument> = [],
+    val floatArguments: Array<FloatArgument> = [],
+    val enumArguments: Array<EnumArgument> = [],
 )
 
-annotation class Argument(
+/**
+ * [String] argument annotation.
+ *
+ * @param name Argument name
+ * @param isNullable This argument is nullable if `true`
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Default value. If default value is null, pass @null
+ */
+annotation class StringArgument(
     val name: String,
-    val type: NavArgumentType,
-    val enumClass: KClass<out Enum<*>> = Enum::class,
+    val isNullable: Boolean = false,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: String = "@null",
 )
 
-enum class NavArgumentType {
-    String, Int, Long, Bool, Float, Enum
-}
+/**
+ * [Int] argument annotation
+ * @param name Argument name
+ * @param isNullable This argument is nullable if `true`
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Default value
+ */
+annotation class IntArgument(
+    val name: String,
+    val isNullable: Boolean = false,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: Int = 0,
+)
+
+/**
+ * [Long] argument annotation
+ * @param name Argument name
+ * @param isNullable This argument is nullable if `true`
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Default value
+ */
+annotation class LongArgument(
+    val name: String,
+    val isNullable: Boolean = false,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: Long = 0L,
+)
+
+/**
+ * [Boolean] argument annotation
+ * @param name Argument name
+ * @param isNullable This argument is nullable if `true`
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Default value
+ */
+annotation class BooleanArgument(
+    val name: String,
+    val isNullable: Boolean = false,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: Boolean = false,
+)
+
+/**
+ * [Float] argument annotation
+ * @param name Argument name
+ * @param isNullable This argument is nullable if `true`
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Default value
+ */
+annotation class FloatArgument(
+    val name: String,
+    val isNullable: Boolean = false,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: Float = 0f,
+)
+
+/**
+ * [Enum] argument annotation. this argument type cannot be nullable.
+ * @param name Argument name
+ * @param enumClass KClass instance of this argument type
+ * @param hasDefaultValue If this argument has default value, should be true.
+ * @param defaultValue Enum name of default. If default not needed, pass @null
+ */
+annotation class EnumArgument(
+    val name: String,
+    val enumClass: KClass<out Enum<*>>,
+    val hasDefaultValue: Boolean = false,
+    val defaultValue: String = "@null",
+)

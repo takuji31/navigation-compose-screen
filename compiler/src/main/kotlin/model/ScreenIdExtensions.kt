@@ -11,10 +11,7 @@ import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
 import jp.takuji31.compose.navigation.compiler.NamedNavArgument
 import jp.takuji31.compose.navigation.compiler.NavDeepLink
-import jp.takuji31.compose.navigation.compiler.NavType
-import jp.takuji31.compose.navigation.compiler.navArgument
 import jp.takuji31.compose.navigation.compiler.navDeepLink
-import jp.takuji31.compose.navigation.screen.annotation.NavArgumentType
 
 data class ScreenIdExtensions(
     val idClassName: ClassName,
@@ -42,48 +39,8 @@ data class ScreenIdExtensions(
                 addStatement("%M -> listOf(", member)
 
                 val codeBlock = CodeBlock.builder().indent()
-                value.args.forEach { arg ->
-                    val type = arg.type
-                    if (type == NavArgumentType.Enum) {
-                        codeBlock.addStatement(
-                            "%M(%S) { type = %T.%M(%T::class.java) },",
-                            navArgument,
-                            arg.name,
-                            NavType,
-                            MemberName(NavType, "EnumType"),
-                            arg.typeName,
-                        )
-                    } else {
-                        codeBlock.addStatement(
-                            "%M(%S) { type = %T.%M },",
-                            navArgument,
-                            arg.name,
-                            NavType,
-                            when (type) {
-                                NavArgumentType.String -> MemberName(
-                                    NavType,
-                                    "StringType",
-                                )
-                                NavArgumentType.Int -> MemberName(
-                                    NavType,
-                                    "IntType",
-                                )
-                                NavArgumentType.Long -> MemberName(
-                                    NavType,
-                                    "LongType",
-                                )
-                                NavArgumentType.Bool -> MemberName(
-                                    NavType,
-                                    "BoolType",
-                                )
-                                NavArgumentType.Float -> MemberName(
-                                    NavType,
-                                    "FloatType",
-                                )
-                                NavArgumentType.Enum -> TODO()
-                            },
-                        )
-                    }
+                value.args.forEach {
+                    codeBlock.add(it.navArgsExtensionStatement)
                 }
                 add(codeBlock.unindent().build())
                 addStatement(")")
