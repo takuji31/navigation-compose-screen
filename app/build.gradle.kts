@@ -88,8 +88,6 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02")
-    kapt("androidx.hilt:hilt-compiler:1.0.0-alpha02")
 
     // For instrumentation tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
@@ -100,7 +98,7 @@ dependencies {
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
     implementation("io.coil-kt:coil:1.1.0")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.4.1")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.4.2")
 
     implementation("com.jakewharton.timber:timber:4.7.1")
 

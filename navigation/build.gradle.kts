@@ -55,7 +55,5 @@ dependencies {
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
     implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:1.0.0-alpha04")
 }

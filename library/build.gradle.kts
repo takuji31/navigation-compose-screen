@@ -55,13 +55,10 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleVersion}")
 
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
     implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:1.0.0-alpha04")
 
     androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
