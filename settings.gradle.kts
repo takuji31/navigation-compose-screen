@@ -1,4 +1,4 @@
-rootProject.name = "ScreenNavigationCompose"
+rootProject.name = "NavigationComposeScreen"
 include(":app")
 include(":annotation")
 include(":common")
