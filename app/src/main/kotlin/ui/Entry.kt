@@ -28,7 +28,7 @@ fun Entry(
                 onClick = onReloadButtonClick,
                 enabled = state !is EntryViewModel.State.Loading,
             ) {
-                Icon(Icons.Default.Refresh)
+                Icon(Icons.Default.Refresh, contentDescription = "Refresh entries")
             }
         },
     ) {

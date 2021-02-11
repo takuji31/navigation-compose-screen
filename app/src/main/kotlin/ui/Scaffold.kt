@@ -56,7 +56,7 @@ fun BlogScaffold(
                 BottomNavigation {
                     for (screen in topLevelScreens) {
                         BottomNavigationItem(
-                            icon = { Icon(screen.icon) },
+                            icon = { Icon(screen.icon, contentDescription = null) },
                             selected = screen.screenId == currentScreen.screenId,
                             onClick = {
                                 onBottomSheetItemClicked(screen)

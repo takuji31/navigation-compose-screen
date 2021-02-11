@@ -4,7 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import jp.takuji31.compose.navigation.example.model.Blog
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Home(
     state: HomeViewModel.State,
@@ -33,7 +36,7 @@ fun Home(
                 onClick = onReloadButtonClick,
                 enabled = state !is HomeViewModel.State.Loading,
             ) {
-                Icon(Icons.Default.Refresh)
+                Icon(Icons.Default.Refresh, contentDescription = "Refresh home")
             }
         },
         onBottomSheetItemClicked = onBottomSheetItemClicked,
@@ -44,7 +47,7 @@ fun Home(
                 items(blogs) { blog ->
                     ListItem(
                         icon = {
-                            Icon(Icons.Default.Person)
+                            Icon(Icons.Default.Person, contentDescription = null)
                         },
                         modifier = Modifier.clickable(onClick = { onItemClick(blog) }),
                     ) {

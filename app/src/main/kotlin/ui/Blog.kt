@@ -4,7 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
@@ -18,6 +20,7 @@ import androidx.compose.ui.Modifier
 import jp.takuji31.compose.navigation.example.model.Entry
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Blog(
     state: BlogViewModel.State,
@@ -32,7 +35,7 @@ fun Blog(
                 onClick = onReloadButtonClick,
                 enabled = state !is BlogViewModel.State.Loading,
             ) {
-                Icon(Icons.Default.Refresh)
+                Icon(Icons.Default.Refresh, contentDescription = "Refresh blogs")
             }
         },
     ) {
@@ -43,7 +46,7 @@ fun Blog(
                 items(entries) { entry ->
                     ListItem(
                         icon = {
-                            Icon(Icons.Default.Book)
+                            Icon(Icons.Default.Book, contentDescription = null)
                         },
                         modifier = Modifier.clickable(onClick = { onItemClick(entry) }),
                     ) {

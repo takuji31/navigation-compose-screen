@@ -43,7 +43,6 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = Versions.kotlinVersion
         kotlinCompilerExtensionVersion = Versions.composeVersion
     }
 }
@@ -55,5 +54,5 @@ dependencies {
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
     implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.navigation:navigation-compose:1.0.0-alpha04")
+    implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
 }
