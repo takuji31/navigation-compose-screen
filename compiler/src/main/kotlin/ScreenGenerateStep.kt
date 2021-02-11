@@ -90,7 +90,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                     val annotations =
                         it.getAnnotationsByType(Route::class.java)
                     if (annotations.isEmpty()) {
-                        throw RuntimeException("${element.simpleName}.${it.simpleName} must have Screen annotation.")
+                        throw RuntimeException("${element.simpleName}.${it.simpleName} must have Route annotation.")
                     } else {
                         val valueAnnotation = annotations.first()
                         ScreenRoute(
