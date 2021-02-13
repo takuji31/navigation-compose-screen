@@ -27,3 +27,7 @@ val composable = MemberName("androidx.navigation.compose", "composable")
 val Parcelize = AnnotationSpec.builder(ClassName.bestGuess("kotlinx.parcelize.Parcelize")).build()
 val Parcelable = ClassName.bestGuess("android.os.Parcelable")
 // endregion
+
+// region Android
+val Uri = ClassName.bestGuess("android.net.Uri")
+//

@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.CLASS)
 annotation class AutoScreenId(
     val screenClassName: String,
+    val dynamicDeepLinkPrefix: Boolean = false,
     val screenBaseClass: KClass<*> = Screen::class,
 )
 

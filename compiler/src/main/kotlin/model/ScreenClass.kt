@@ -25,6 +25,7 @@ data class ScreenClass(
     val screenBaseClassName: ClassName,
     val screenBaseClassIsInterface: Boolean,
     val composeBuilderClassName: ClassName,
+    val dynamicDeepLinkPrefix: Boolean,
     val routes: List<ScreenRoute>,
 ) {
 
@@ -128,12 +129,29 @@ data class ScreenClass(
                 .build()
 
         val spec = TypeSpec.classBuilder(composeBuilderClassName)
-            .primaryConstructor(
+
+        val deepLinkPrefixName = "deepLinkPrefix"
+        if (dynamicDeepLinkPrefix) {
+            spec.primaryConstructor(
+                FunSpec.constructorBuilder()
+                    .addParameter(navGraphBuilderName, NavGraphBuilder)
+                    .addParameter(deepLinkPrefixName, STRING)
+                    .build(),
+            )
+            spec.addProperty(
+                PropertySpec.builder(deepLinkPrefixName, STRING)
+                    .initializer(deepLinkPrefixName)
+                    .build(),
+            )
+        } else {
+            spec.primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter(navGraphBuilderName, NavGraphBuilder)
                     .build(),
             )
-            .addProperty(navGraphBuilder)
+        }
+
+        spec.addProperty(navGraphBuilder)
 
         val functions = routes.map { route ->
             val contentParameter = ParameterSpec.builder(
@@ -151,13 +169,26 @@ data class ScreenClass(
                 ).copy(annotations = listOf(ComposableAnnotation)),
             ).build()
 
-            val codeBlock = CodeBlock.builder().addStatement(
-                "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks) {",
-                navGraphBuilder,
-                composable,
-                enumClassName,
-                MemberName(enumClassName, route.name),
-            )
+            val codeBlock = CodeBlock.builder()
+
+            if (dynamicDeepLinkPrefix) {
+                codeBlock.addStatement(
+                    "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks(%5N)) {",
+                    navGraphBuilder,
+                    composable,
+                    enumClassName,
+                    MemberName(enumClassName, route.name),
+                    deepLinkPrefixName,
+                )
+            } else {
+                codeBlock.addStatement(
+                    "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks()) {",
+                    navGraphBuilder,
+                    composable,
+                    enumClassName,
+                    MemberName(enumClassName, route.name),
+                )
+            }
 
             val lambdaCodeBlock = CodeBlock.builder()
                 .indent()

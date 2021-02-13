@@ -29,7 +29,7 @@ fun Main(navController: ScreenNavController) {
                 popUpTo(ExampleScreenId.Home) { inclusive = screen is ExampleScreen.Home }
             }
         }
-        exampleScreenComposable {
+        exampleScreenComposable(deepLinkPrefix = "https://takuji31.jp") {
             home { screen ->
                 val context = LocalContext.current
                 val navBackStackEntry by navController.navController.currentBackStackEntryAsState()

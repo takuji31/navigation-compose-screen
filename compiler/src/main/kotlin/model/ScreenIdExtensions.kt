@@ -11,17 +11,18 @@ import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
 import jp.takuji31.compose.navigation.compiler.NamedNavArgument
 import jp.takuji31.compose.navigation.compiler.NavDeepLink
+import jp.takuji31.compose.navigation.compiler.Uri
 import jp.takuji31.compose.navigation.compiler.navDeepLink
 
 data class ScreenIdExtensions(
     val idClassName: ClassName,
+    val dynamicDeepLinkPrefix: Boolean,
     val routes: List<ScreenRoute>,
 ) {
     val propertySpecs by lazy {
         listOf(
             routeExtensionSpec,
             navArgsExtensionSpec,
-            deepLinksExtensionSpec,
         )
     }
     private val routeExtensionSpec: PropertySpec by lazy {
@@ -50,25 +51,60 @@ data class ScreenIdExtensions(
         }
     }
 
-    private val deepLinksExtensionSpec: PropertySpec by lazy {
-        createEnumExtensionPropertySpec(
-            "deepLinks",
-            LIST.parameterizedBy(NavDeepLink),
-        ) { value, member ->
-            if (value.hasDeepLinks) {
-                addStatement("%M -> listOf(", member)
+    val deepLinksExtensionSpec: FunSpec by lazy {
+        val spec = FunSpec.builder("deepLinks")
+            .receiver(idClassName)
+            .returns(LIST.parameterizedBy(NavDeepLink))
 
-                val codeBlock = CodeBlock.builder().indent()
-                value.annotation.deepLinks.forEach {
-                    codeBlock.addStatement("%M { uriPattern = %S }", navDeepLink, it)
+        if (dynamicDeepLinkPrefix) {
+            spec.addParameter("prefix", STRING)
+        }
+
+        val codeBlock = CodeBlock.builder()
+            .beginControlFlow("return when(this)")
+
+        routes.forEach { screenRoute ->
+            if (screenRoute.hasDeepLinks) {
+                codeBlock.addStatement("%M -> listOf(", MemberName(idClassName, screenRoute.name))
+
+                val builderBlock = CodeBlock.builder().indent()
+                screenRoute.annotation.deepLinks.forEach {
+                    if (dynamicDeepLinkPrefix) {
+                        builderBlock.addStatement("%M {", navDeepLink)
+                            .indent()
+                            .addStatement(
+                                "val uriBuilder = %T.parse(prefix).buildUpon()",
+                                Uri,
+                            )
+                            .addStatement(
+                                "val deepLink = %T.parse(%S)",
+                                Uri,
+                                it,
+                            )
+                            .addStatement("uriPattern = uriBuilder.path(deepLink.path).query(deepLink.query).build().toString()")
+                            .unindent()
+                            .addStatement("}")
+                    } else {
+                        builderBlock.addStatement(
+                            "%M { uriPattern = %S }",
+                            navDeepLink, it,
+                        )
+                    }
                 }
 
-                add(codeBlock.unindent().build())
-                addStatement(")")
+                codeBlock.add(builderBlock.unindent().build())
+                codeBlock.addStatement(")")
             } else {
-                addStatement("%M -> emptyList()", member)
+                codeBlock.addStatement(
+                    "%M -> emptyList()",
+                    MemberName(idClassName, screenRoute.name),
+                )
             }
         }
+        codeBlock.endControlFlow()
+
+        spec.addCode(codeBlock.build())
+        spec.build()
     }
 
     private fun createEnumExtensionPropertySpec(

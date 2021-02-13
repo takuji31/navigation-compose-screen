@@ -12,6 +12,7 @@ abstract class MyScreen<S : Enum<*>> : Screen<S>
 @AutoScreenId(
     "ExampleScreen",
     screenBaseClass = MyScreen::class,
+    dynamicDeepLinkPrefix = true,
 )
 enum class ExampleScreenId {
     @Route(

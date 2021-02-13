@@ -111,19 +111,25 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                     screenBaseClassName,
                     screenBaseClass.isInterface,
                     composeBuilderClassName,
+                    annotation.dynamicDeepLinkPrefix,
                     routes,
                 ).typeSpec,
             )
 
-            ScreenIdExtensions(
+            val screenIdExtensions = ScreenIdExtensions(
                 idClassName,
+                annotation.dynamicDeepLinkPrefix,
                 routes,
-            ).propertySpecs.forEach { fileSpec.addProperty(it) }
+            )
+            screenIdExtensions.propertySpecs.forEach { fileSpec.addProperty(it) }
+
+            fileSpec.addFunction(screenIdExtensions.deepLinksExtensionSpec)
 
             fileSpec.addFunction(
                 ComposeBuilderFunction(
                     screenClassName,
                     composeBuilderClassName,
+                    annotation.dynamicDeepLinkPrefix,
                 ).spec,
             )
 
