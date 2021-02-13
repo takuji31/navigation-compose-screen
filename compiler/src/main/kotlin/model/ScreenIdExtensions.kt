@@ -11,7 +11,6 @@ import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
 import jp.takuji31.compose.navigation.compiler.NamedNavArgument
 import jp.takuji31.compose.navigation.compiler.NavDeepLink
-import jp.takuji31.compose.navigation.compiler.Uri
 import jp.takuji31.compose.navigation.compiler.navDeepLink
 
 data class ScreenIdExtensions(
@@ -70,20 +69,11 @@ data class ScreenIdExtensions(
                 val builderBlock = CodeBlock.builder().indent()
                 screenRoute.annotation.deepLinks.forEach {
                     if (dynamicDeepLinkPrefix) {
-                        builderBlock.addStatement("%M {", navDeepLink)
-                            .indent()
-                            .addStatement(
-                                "val uriBuilder = %T.parse(prefix).buildUpon()",
-                                Uri,
-                            )
-                            .addStatement(
-                                "val deepLink = %T.parse(%S)",
-                                Uri,
-                                it,
-                            )
-                            .addStatement("uriPattern = uriBuilder.path(deepLink.path).query(deepLink.query).build().toString()")
-                            .unindent()
-                            .addStatement("}")
+                        builderBlock.addStatement(
+                            "%M { uriPattern = prefix + %S }",
+                            navDeepLink,
+                            it,
+                        )
                     } else {
                         builderBlock.addStatement(
                             "%M { uriPattern = %S }",
