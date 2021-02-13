@@ -26,7 +26,7 @@ data class Arg constructor(
     val name: String,
     val isNullable: Boolean,
     val hasDefaultValue: Boolean,
-    val typeName: TypeName,
+    private val typeName: TypeName,
     val defaultValue: Any? = null,
 ) {
 
