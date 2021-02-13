@@ -10,6 +10,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -24,6 +25,7 @@ import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 @Composable
 fun Home(
     state: HomeViewModel.State,
+    snackbarHostState: SnackbarHostState,
     screen: ExampleScreen.Home,
     onReloadButtonClick: () -> Unit,
     onBottomSheetItemClicked: (ExampleScreen) -> Unit,
@@ -31,6 +33,7 @@ fun Home(
 ) {
     BlogScaffold(
         currentScreen = screen,
+        snackbarHostState = snackbarHostState,
         actions = {
             IconButton(
                 onClick = onReloadButtonClick,

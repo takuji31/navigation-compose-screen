@@ -1,5 +1,6 @@
 package jp.takuji31.compose.navigation.example.ui
 
+import androidx.compose.material.SnackbarHostState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,8 @@ class HomeViewModel @Inject constructor(
     val state: MutableStateFlow<State>
         get() = _state
 
+    val snackbarHostState = SnackbarHostState()
+
     init {
         viewModelScope.launch {
             load()
@@ -36,6 +39,10 @@ class HomeViewModel @Inject constructor(
             _state.value = State.Loading
             load()
         }
+    }
+
+    suspend fun showSnackBar(deepLinkOnlyArg: String?) {
+        snackbarHostState.showSnackbar("Hello $deepLinkOnlyArg from Deep Link")
     }
 
     sealed class State {

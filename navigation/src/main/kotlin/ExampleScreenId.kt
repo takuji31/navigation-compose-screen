@@ -17,13 +17,13 @@ abstract class MyScreen<S : Enum<*>> : Screen<S>
 enum class ExampleScreenId {
     @Route(
         "/",
-        deepLinks = ["https://takuji31.jp/compose-navigation/?fromDeeplink={fromDeepLink}&deepLinkOnlyArg={deepLinkOnlyArg}"],
+        deepLinks = ["/?fromDeepLink={fromDeepLink}&deepLinkOnlyArg={deepLinkOnlyArg}"],
         booleanArguments = [
             BooleanArgument(
                 "fromDeepLink",
                 isNullable = false,
                 hasDefaultValue = true,
-                defaultValue = true,
+                defaultValue = false,
             ),
         ],
     )

@@ -6,12 +6,15 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 
@@ -40,11 +43,14 @@ val ExampleScreen.title: String
 fun BlogScaffold(
     currentScreen: ExampleScreen,
     title: String = currentScreen.title,
+    snackbarHostState: SnackbarHostState = remember(currentScreen) { SnackbarHostState() },
     onBottomSheetItemClicked: (ExampleScreen) -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable (paddingValues: PaddingValues) -> Unit,
 ) {
+    val state = rememberScaffoldState(snackbarHostState = snackbarHostState)
     Scaffold(
+        scaffoldState = state,
         topBar = {
             TopAppBar(
                 title = { Text(text = title) },
