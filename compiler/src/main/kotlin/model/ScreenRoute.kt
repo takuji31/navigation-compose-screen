@@ -26,54 +26,98 @@ data class ScreenRoute(
     }
 
     val hasArgs: Boolean by lazy {
-        annotation.route.contains(argPattern)
+        annotation.route.contains(argPattern) || annotation.deepLinks.any { it.contains(argPattern) }
     }
 
     val hasDeepLinks: Boolean by lazy {
         annotation.deepLinks.isNotEmpty()
     }
 
-    val args: List<Arg> by lazy {
-        val matchedArgs = argPattern.findAll(annotation.route).map { it.groupValues[1] }
-        val argMap =
-            listOf(
-                annotation.stringArguments.map { it.name to it },
-                annotation.intArguments.map { it.name to it },
-                annotation.longArguments.map { it.name to it },
-                annotation.booleanArguments.map { it.name to it },
-                annotation.floatArguments.map { it.name to it },
-                annotation.enumArguments.map { it.name to it },
-            )
-                .flatten()
-                .groupBy { it.first }
-                .mapValues { entry ->
-                    if (entry.value.size > 1) {
-                        error("Argument key ${entry.key} is Duplicated in $name")
-                    }
-                    entry.value.map { it.second }.first()
+    private val argMap: Map<String, Arg> by lazy {
+        val definedArgs = listOf(
+            annotation.stringArguments.map { it.name to it },
+            annotation.intArguments.map { it.name to it },
+            annotation.longArguments.map { it.name to it },
+            annotation.booleanArguments.map { it.name to it },
+            annotation.floatArguments.map { it.name to it },
+            annotation.enumArguments.map { it.name to it },
+        )
+            .flatten()
+            .groupBy { it.first }
+            .mapValues { entry ->
+                if (entry.value.size > 1) {
+                    error("Argument key ${entry.key} is Duplicated in $name")
                 }
+                entry.value.map { it.second }.first().toArg()
+            }
 
-        matchedArgs.map { name ->
-            when (val annotation = argMap[name]) {
-                is StringArgument -> Arg.from(annotation)
-                is IntArgument -> Arg.from(annotation)
-                is LongArgument -> Arg.from(annotation)
-                is BooleanArgument -> Arg.from(annotation)
-                is FloatArgument -> Arg.from(annotation)
-                is EnumArgument -> Arg.from(elements, annotation)
-                null -> Arg(
-                    Arg.Type.String,
-                    name,
+        val definedKeys = definedArgs.keys
+        check(routePathArgNames.none { routeQueryArgNames.contains(it) }) {
+            "Argument key used twice in $name.route"
+        }
+        val generatedArgs = (
+            (routePathArgNames - definedKeys).map {
+                it to Arg(
+                    type = Arg.Type.String,
+                    name = it,
                     isNullable = false,
                     hasDefaultValue = false,
-                    STRING,
+                    typeName = STRING,
                 )
-                else -> error("unknown annotation $annotation")
-            }
-        }.toList()
+            } +
+                (routeQueryArgNames - definedKeys).map {
+                    it to Arg(
+                        type = Arg.Type.String,
+                        name = it,
+                        isNullable = true,
+                        hasDefaultValue = true,
+                        typeName = STRING,
+                        defaultValue = null,
+                    )
+                }
+            ).toMap()
+
+        val deepLinkArgs = (annotation.deepLinks.map { deepLink ->
+            deepLink.extractParameters()
+        }.flatten() - (definedKeys + generatedArgs.keys)).map {
+            it to Arg(
+                type = Arg.Type.String,
+                name = it,
+                isNullable = true,
+                hasDefaultValue = true,
+                typeName = STRING,
+                defaultValue = null,
+            )
+        }.toMap()
+
+        definedArgs + generatedArgs + deepLinkArgs
+    }
+    private val routePathAndQuery by lazy { annotation.route.split("?", limit = 2) }
+    private val routePath: String by lazy { routePathAndQuery[0] }
+    private val routeQuery: String by lazy { routePathAndQuery.getOrNull(1) ?: "" }
+    private val routePathArgNames: List<String> by lazy {
+        routePath.extractParameters()
+    }
+    private val routeQueryArgNames: List<String> by lazy {
+        routeQuery.extractParameters()
+    }
+
+    private fun String.extractParameters() =
+        argPattern.findAll(this).map { it.groupValues[1] }.toList()
+
+    val args: List<Arg> by lazy { argMap.values.toList() }
+
+    private fun Annotation.toArg(): Arg = when (this) {
+        is StringArgument -> Arg.from(this)
+        is IntArgument -> Arg.from(this)
+        is LongArgument -> Arg.from(this)
+        is BooleanArgument -> Arg.from(this)
+        is FloatArgument -> Arg.from(this)
+        is EnumArgument -> Arg.from(elements, this)
+        else -> error("unknown annotation $this")
     }
 
     companion object {
-        private val argPattern = """\{([^/]+)}""".toRegex()
+        private val argPattern = """\{([^/}]+)}""".toRegex()
     }
 }

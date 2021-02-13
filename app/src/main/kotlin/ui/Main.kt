@@ -22,11 +22,11 @@ fun Main(navController: ScreenNavController) {
     val currentScreen by navController.currentScreen.collectAsState()
     ScreenNavHost(
         navController = navController,
-        startScreen = ExampleScreen.Home,
+        startScreen = ExampleScreen.Home(),
     ) {
         val onBottomSheetItemClicked: (ExampleScreen) -> Unit = { screen ->
             navController.navigate(screen) {
-                popUpTo(ExampleScreenId.Home) { inclusive = screen == ExampleScreen.Home }
+                popUpTo(ExampleScreenId.Home) { inclusive = screen is ExampleScreen.Home }
             }
         }
         exampleScreenComposable {

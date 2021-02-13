@@ -30,6 +30,8 @@ data class Arg constructor(
     val defaultValue: Any? = null,
 ) {
 
+    val typeNameWithNullability: TypeName by lazy { typeName.copy(nullable = isNullable) }
+
     val navArgsExtensionStatement: CodeBlock by lazy {
         val codeBlock = CodeBlock.builder()
             .addStatement("%M(%S) {", navArgument, name)

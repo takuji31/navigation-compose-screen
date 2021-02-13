@@ -53,9 +53,9 @@ data class ScreenClass(
                 PropertySpec.builder("screenId", enumClassName, KModifier.OVERRIDE)
                     .initializer("%N", screenIdParameter).build(),
             )
-        val screenChildren = routes.map { value ->
-            val valueClassName = className.nestedClass(value.bestTypeName)
-            val builder = if (value.hasArgs) {
+        val screenChildren = routes.map { screenRoute ->
+            val valueClassName = className.nestedClass(screenRoute.bestTypeName)
+            val builder = if (screenRoute.hasArgs) {
                 TypeSpec.classBuilder(valueClassName)
             } else {
                 TypeSpec.objectBuilder(valueClassName)
@@ -65,7 +65,7 @@ data class ScreenClass(
                 .addSuperclassConstructorParameter(
                     "%N.%N",
                     enumClassName.simpleName,
-                    enumClassName.member(value.name),
+                    enumClassName.member(screenRoute.name),
                 )
 
             builder
@@ -78,22 +78,31 @@ data class ScreenClass(
                         .build(),
                 )
 
-            if (value.hasArgs) {
+            if (screenRoute.hasArgs) {
                 val parameterizedRouteProperty =
                     PropertySpec.builder("parameterizedRoute", STRING, KModifier.OVERRIDE)
                 val constructor = FunSpec.constructorBuilder()
-                var route = value.annotation.route
+                var route = screenRoute.annotation.route
 
                 val constructorParameters =
-                    value.args.map { ParameterSpec.builder(it.name, it.typeName).build() }
+                    screenRoute.args.map {
+                        ParameterSpec.builder(
+                            it.name,
+                            it.typeNameWithNullability,
+                        ).apply {
+                            if (it.hasDefaultValue) {
+                                defaultValue("%L", it.defaultValue)
+                            }
+                        }.build()
+                    }
                 constructor.addParameters(constructorParameters)
 
-                val properties = value.args.map { navArgument ->
-                    PropertySpec.builder(navArgument.name, navArgument.typeName)
+                val properties = screenRoute.args.map { navArgument ->
+                    PropertySpec.builder(navArgument.name, navArgument.typeNameWithNullability)
                         .initializer(navArgument.name).build()
                 }
 
-                value.args.forEach { route = route.replace("{${it.name}}", "\$${it.name}") }
+                screenRoute.args.forEach { route = route.replace("{${it.name}}", "\$${it.name}") }
 
                 builder.primaryConstructor(constructor.build())
                 builder.addProperties(properties)
@@ -160,7 +169,7 @@ data class ScreenClass(
                         "val %N = arguments[%S] as %T",
                         arg.name,
                         arg.name,
-                        arg.typeName,
+                        arg.typeNameWithNullability,
                     )
                 }
                 lambdaCodeBlock.add(argumentsCodeBlock.build())
