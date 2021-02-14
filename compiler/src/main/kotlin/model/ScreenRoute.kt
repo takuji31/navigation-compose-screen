@@ -33,7 +33,17 @@ data class ScreenRoute(
         annotation.deepLinks.isNotEmpty()
     }
 
-    private val argMap: Map<String, Arg> by lazy {
+    private val routePathAndQuery by lazy { annotation.route.split("?", limit = 2) }
+    private val routePath: String by lazy { routePathAndQuery[0] }
+    private val routeQuery: String by lazy { routePathAndQuery.getOrNull(1) ?: "" }
+    private val routePathArgNames: List<String> by lazy {
+        routePath.extractParameters()
+    }
+    private val routeQueryArgNames: List<String> by lazy {
+        routeQuery.extractParameters()
+    }
+
+    val args: List<Arg> by lazy {
         val definedArgs = listOf(
             annotation.stringArguments.map { it.name to it },
             annotation.intArguments.map { it.name to it },
@@ -77,9 +87,9 @@ data class ScreenRoute(
                 }
             ).toMap()
 
-        val deepLinkArgs = (annotation.deepLinks.map { deepLink ->
-            deepLink.extractParameters()
-        }.flatten() - (definedKeys + generatedArgs.keys)).map {
+        val deepLinkArgNames =
+            annotation.deepLinks.map { deepLink -> deepLink.extractParameters() }.flatten()
+        val deepLinkArgs = (deepLinkArgNames - (definedKeys + generatedArgs.keys)).map {
             it to Arg(
                 type = Arg.Type.String,
                 name = it,
@@ -90,22 +100,15 @@ data class ScreenRoute(
             )
         }.toMap()
 
-        definedArgs + generatedArgs + deepLinkArgs
-    }
-    private val routePathAndQuery by lazy { annotation.route.split("?", limit = 2) }
-    private val routePath: String by lazy { routePathAndQuery[0] }
-    private val routeQuery: String by lazy { routePathAndQuery.getOrNull(1) ?: "" }
-    private val routePathArgNames: List<String> by lazy {
-        routePath.extractParameters()
-    }
-    private val routeQueryArgNames: List<String> by lazy {
-        routeQuery.extractParameters()
+        val navArgs = definedArgs + generatedArgs + deepLinkArgs
+
+        // order map key by argument order
+        (routePathArgNames + routeQueryArgNames + deepLinkArgNames)
+            .map { checkNotNull(navArgs[it]) }
     }
 
     private fun String.extractParameters() =
         argPattern.findAll(this).map { it.groupValues[1] }.toList()
-
-    val args: List<Arg> by lazy { argMap.values.toList() }
 
     private fun Annotation.toArg(): Arg = when (this) {
         is StringArgument -> Arg.from(this)
