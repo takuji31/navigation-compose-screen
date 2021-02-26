@@ -84,7 +84,7 @@ dependencies {
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha02")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha03")
 
     implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
@@ -99,8 +99,8 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
-    implementation("io.coil-kt:coil:1.1.0")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.5.0")
+    implementation("io.coil-kt:coil:1.1.1")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.0")
 
     implementation("com.jakewharton.timber:timber:4.7.1")
 
