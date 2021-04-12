@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.0-alpha14")
@@ -14,11 +14,24 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 
 tasks.create<Delete>("clean") {
     delete(rootProject.buildDir)
+}
+
+subprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                // force kotlinx-collections-immutable-jvm version 0.3.3 to 0.3.4 because 0.3.3 is not available on Maven Central
+                if (requested.group == "org.jetbrains.kotlinx" && requested.name == "kotlinx-collections-immutable-jvm" && requested.version == "0.3.3") {
+                    useVersion("0.3.4")
+                }
+            }
+        }
+    }
 }
