@@ -4,9 +4,9 @@ Screen object support for navigation-compose
 
 ## Requirements
 
-- Android Gradle Plugin 7.0.0-alpha08 or later
-- Jetpack Compose 1.0.0-beta01
-- navigation-compose 1.0.0-alpha08
+- Android Gradle Plugin 7.0.0-alpha14 or later
+- Jetpack Compose 1.0.0-beta03
+- navigation-compose 1.0.0-alpha10
 - Kotlin 1.4.30
 - minimum SDK version 23 (Android 6.0)
 
