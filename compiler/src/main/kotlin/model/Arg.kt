@@ -1,23 +1,12 @@
 package jp.takuji31.compose.navigation.compiler.model
 
-import com.squareup.kotlinpoet.BOOLEAN
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.INT
-import com.squareup.kotlinpoet.LONG
-import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.STRING
-import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
 import com.squareup.kotlinpoet.metadata.toImmutableKmClass
 import jp.takuji31.compose.navigation.compiler.NavType
 import jp.takuji31.compose.navigation.compiler.navArgument
-import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
-import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
-import jp.takuji31.compose.navigation.screen.annotation.FloatArgument
-import jp.takuji31.compose.navigation.screen.annotation.IntArgument
-import jp.takuji31.compose.navigation.screen.annotation.LongArgument
-import jp.takuji31.compose.navigation.screen.annotation.StringArgument
+import jp.takuji31.compose.navigation.screen.annotation.*
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.util.Elements
 
@@ -37,23 +26,25 @@ data class Arg constructor(
             .addStatement("%M(%S) {", navArgument, name)
             .indent()
 
+        val typeName = "${type.name}Type"
+
         if (type == Type.Enum) {
-            codeBlock.addStatement("type = %T.%M(%T::class.java)", NavType, navType, typeName)
-        } else {
-            codeBlock.addStatement("type = %T.%M", NavType, navType)
-        }
-
-        codeBlock.addStatement("nullable = %L", isNullable)
-
-        if (hasDefaultValue) {
-            if (type == Type.Enum) {
+            val navType = MemberName(NavType, typeName)
+            codeBlock.addStatement(
+                "type = %T.%M(%T::class.java)", NavType, navType,
+                this.typeName,
+            )
+            if (hasDefaultValue) {
                 checkNotNull(defaultValue) { "Enum default value cannot be null. at: $name" }
                 codeBlock.addStatement(
                     "defaultValue = %T.%M",
-                    typeName,
-                    MemberName(typeName as ClassName, defaultValue as String),
+                    this.typeName,
+                    MemberName(this.typeName as ClassName, defaultValue as String),
                 )
-            } else {
+            }
+        } else {
+            codeBlock.addStatement("type = %T.%N", NavType, NavType.member(typeName))
+            if (hasDefaultValue) {
                 check(defaultValue != null || isNullable) {
                     "DefaultValue cannot be null when argument is not nullable. at: $name"
                 }
@@ -61,12 +52,13 @@ data class Arg constructor(
             }
         }
 
+        codeBlock.addStatement("nullable = %L", isNullable)
+
+
 
         codeBlock.unindent().addStatement("},")
         codeBlock.build()
     }
-
-    private val navType by lazy { MemberName(NavType, "${type.name}Type") }
 
     companion object {
         fun from(stringArgument: StringArgument): Arg = Arg(

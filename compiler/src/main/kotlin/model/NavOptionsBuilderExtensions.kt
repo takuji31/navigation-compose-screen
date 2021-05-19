@@ -1,13 +1,8 @@
 package jp.takuji31.compose.navigation.compiler.model
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.LambdaTypeName
-import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.UNIT
+import com.squareup.kotlinpoet.*
 import jp.takuji31.compose.navigation.compiler.NavOptionsBuilder
 import jp.takuji31.compose.navigation.compiler.PopUpToBuilder
-import jp.takuji31.compose.navigation.compiler.popUpTo
 
 data class NavOptionsBuilderExtensions(
     val idClass: ClassName,
@@ -18,8 +13,7 @@ data class NavOptionsBuilderExtensions(
             .addParameter("id", idClass)
             .addParameter("builder", LambdaTypeName.get(PopUpToBuilder, returnType = UNIT))
             .addStatement(
-                "return %M(id.%M, builder)",
-                popUpTo,
+                "return popUpTo(id.%M, builder)",
                 MemberName(idClass.packageName, "route"),
             )
 

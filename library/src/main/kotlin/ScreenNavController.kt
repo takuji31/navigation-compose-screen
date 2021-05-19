@@ -6,8 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.compose.KEY_ROUTE
-import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,9 +20,10 @@ class ScreenNavController(val navController: NavHostController) {
     private var onDestinationChanged: ((route: String) -> Screen<*>?)? = null
 
     init {
-        navController.addOnDestinationChangedListener { _, _, args ->
+        navController.addOnDestinationChangedListener { _, destination, args ->
             checkNotNull(args)
-            val route = args[KEY_ROUTE] as String
+
+            val route = destination.route ?: return@addOnDestinationChangedListener
             val argsScreen = args[KEY_SCREEN] as? Screen<*>
             val newScreen = onDestinationChanged?.invoke(route)
             if (newScreen != null) {
@@ -43,7 +42,8 @@ class ScreenNavController(val navController: NavHostController) {
         val currentBackStackEntry =
             checkNotNull(navController.currentBackStackEntry) { "ScreenNavController.setFirstScreen should not call before creating graph" }
         val arguments = checkNotNull(currentBackStackEntry.arguments)
-        val route = arguments.get(KEY_ROUTE)
+
+        val route = currentBackStackEntry.destination.route ?: return
         val argumentScreen = arguments.get(KEY_SCREEN)
         if (currentScreen.value == null && argumentScreen == null && route == firstScreen.parameterizedRoute) {
             arguments.putParcelable(KEY_SCREEN, firstScreen as Parcelable)

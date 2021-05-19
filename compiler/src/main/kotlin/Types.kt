@@ -14,7 +14,6 @@ val PopUpToBuilder = ClassName.bestGuess("androidx.navigation.PopUpToBuilder")
 
 val navArgument = MemberName("androidx.navigation.compose", "navArgument")
 val navDeepLink = MemberName("androidx.navigation", "navDeepLink")
-val popUpTo = MemberName("androidx.navigation.compose", "popUpTo")
 // endregion
 
 // region Compose
