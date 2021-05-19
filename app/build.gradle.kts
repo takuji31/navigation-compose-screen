@@ -69,14 +69,14 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
 
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.core:core-ktx:1.5.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleVersion}")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("com.google.android.material:material:1.2.1")
+    implementation("androidx.appcompat:appcompat:1.3.0")
+    implementation("com.google.android.material:material:1.3.0")
 
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
     implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
@@ -84,12 +84,12 @@ dependencies {
     implementation("androidx.compose.material:material:${Versions.composeVersion}")
     implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha03")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha08")
 
     implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
-    implementation("androidx.hilt:hilt-navigation:1.0.0-alpha03")
+    implementation("androidx.hilt:hilt-navigation:1.0.0")
 
     // For instrumentation tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
@@ -99,7 +99,7 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
-    implementation("io.coil-kt:coil:1.1.1")
+    implementation("io.coil-kt:coil:1.2.1")
     implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.0")
 
     implementation("com.jakewharton.timber:timber:4.7.1")
@@ -115,13 +115,13 @@ dependencies {
     implementation(project(":navigation"))
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
-    androidTestImplementation("junit:junit:4.13.1")
+    androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:rules:1.3.0")
     androidTestImplementation("androidx.test:runner:1.3.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
-    androidTestImplementation("com.google.truth:truth:1.1")
-    androidTestImplementation("androidx.activity:activity-ktx:1.1.0")
+    androidTestImplementation("com.google.truth:truth:1.1.2")
+    androidTestImplementation("androidx.activity:activity-ktx:1.2.3")
 }
 
 kapt {
