@@ -21,7 +21,7 @@ class ScreenNavController(val navController: NavHostController) {
 
     init {
         navController.addOnDestinationChangedListener { _, destination, args ->
-            checkNotNull(args)
+            args ?: return@addOnDestinationChangedListener
 
             val route = destination.route ?: return@addOnDestinationChangedListener
             val argsScreen = args[KEY_SCREEN] as? Screen<*>
@@ -39,8 +39,7 @@ class ScreenNavController(val navController: NavHostController) {
     }
 
     internal fun setFirstScreen(firstScreen: Screen<*>) {
-        val currentBackStackEntry =
-            checkNotNull(navController.currentBackStackEntry) { "ScreenNavController.setFirstScreen should not call before creating graph" }
+        val currentBackStackEntry = navController.currentBackStackEntry ?: return
         val arguments = checkNotNull(currentBackStackEntry.arguments)
 
         val route = currentBackStackEntry.destination.route ?: return
