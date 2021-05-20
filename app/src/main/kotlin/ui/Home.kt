@@ -5,16 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.ListItem
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +23,7 @@ fun Home(
     snackbarHostState: SnackbarHostState,
     screen: ExampleScreen.Home,
     onReloadButtonClick: () -> Unit,
+    onSettingsButtonClick: () -> Unit,
     onBottomSheetItemClicked: (ExampleScreen) -> Unit,
     onItemClick: (Blog) -> Unit,
 ) {
@@ -40,6 +36,11 @@ fun Home(
                 enabled = state !is HomeViewModel.State.Loading,
             ) {
                 Icon(Icons.Default.Refresh, contentDescription = "Refresh home")
+            }
+            IconButton(
+                onClick = onSettingsButtonClick,
+            ) {
+                Icon(Icons.Default.Settings, contentDescription = "Settings")
             }
         },
         onBottomSheetItemClicked = onBottomSheetItemClicked,
