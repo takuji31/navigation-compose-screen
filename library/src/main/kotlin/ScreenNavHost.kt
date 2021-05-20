@@ -1,7 +1,7 @@
 package jp.takuji31.compose.navigation.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 
@@ -11,8 +11,9 @@ fun ScreenNavHost(
     startScreen: Screen<*>,
     builder: NavGraphBuilder.() -> Unit,
 ) {
-    LaunchedEffect(navController, startScreen, builder) {
+    DisposableEffect(navController, startScreen, builder) {
         navController.setFirstScreen(startScreen)
+        onDispose { }
     }
     NavHost(
         navController = navController.navController,
