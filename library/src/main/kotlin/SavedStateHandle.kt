@@ -29,6 +29,9 @@ fun <T : Screen<*>> SavedStateHandle.screen(screenClass: KClass<T>): SavedStateH
 
 inline fun <reified T : Screen<*>> SavedStateHandle.screen() = screen(T::class)
 
-fun SavedStateHandle(screen: Screen<*>, args: Map<String, Any>): SavedStateHandle = SavedStateHandle(
-    args + (SavedStateHandleScreenKey to screen),
+fun SavedStateHandle(
+    screen: Screen<*>,
+    initialState: Map<String, Any> = emptyMap(),
+): SavedStateHandle = SavedStateHandle(
+    initialState + (SavedStateHandleScreenKey to screen),
 )
