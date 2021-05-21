@@ -8,13 +8,17 @@ import kotlin.reflect.KProperty
 
 private const val SavedStateHandleScreenKey = "__navigation-compose-screen_screen__"
 
-class SavedStateHandleScreenPropertyDelegate<T : Screen<*>>(private val screenClass: KClass<T>, private val savedStateHandle: SavedStateHandle) : ReadWriteProperty<ViewModel, T> {
+class SavedStateHandleScreenPropertyDelegate<T : Screen<*>>(
+    private val screenClass: KClass<T>,
+    private val savedStateHandle: SavedStateHandle,
+) : ReadWriteProperty<ViewModel, T> {
     @Suppress("UNCHECKED_CAST")
     override fun getValue(thisRef: ViewModel, property: KProperty<*>): T {
         return if (savedStateHandle.contains(SavedStateHandleScreenKey)) {
             checkNotNull(savedStateHandle[SavedStateHandleScreenKey]) as T
         } else {
-            val screen = ScreenFactoryRegistry.findByClass<ScreenFactory<*>>(screenClass).fromSavedStateHandle(savedStateHandle)
+            val screen = ScreenFactoryRegistry.findByClass<ScreenFactory<*>>(screenClass)
+                .fromSavedStateHandle(savedStateHandle)
             savedStateHandle.set(SavedStateHandleScreenKey, screen)
             screen as T
         }
@@ -25,7 +29,8 @@ class SavedStateHandleScreenPropertyDelegate<T : Screen<*>>(private val screenCl
     }
 }
 
-fun <T : Screen<*>> SavedStateHandle.screen(screenClass: KClass<T>): SavedStateHandleScreenPropertyDelegate<T> = SavedStateHandleScreenPropertyDelegate(screenClass, this)
+fun <T : Screen<*>> SavedStateHandle.screen(screenClass: KClass<T>): SavedStateHandleScreenPropertyDelegate<T> =
+    SavedStateHandleScreenPropertyDelegate(screenClass, this)
 
 inline fun <reified T : Screen<*>> SavedStateHandle.screen() = screen(T::class)
 
