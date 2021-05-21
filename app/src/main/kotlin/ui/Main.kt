@@ -1,7 +1,10 @@
 package jp.takuji31.compose.navigation.example.ui
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,12 +38,6 @@ fun Main(navController: ScreenNavController) {
                 }
                 val viewModel = viewModel<HomeViewModel>(factory = viewModelFactory)
                 val state by viewModel.state.collectAsState()
-
-                LaunchedEffect(navBackStackEntry) {
-                    if (screen.fromDeepLink) {
-                        viewModel.showSnackBar(screen.deepLinkOnlyArg)
-                    }
-                }
 
                 Home(
                     state = state,

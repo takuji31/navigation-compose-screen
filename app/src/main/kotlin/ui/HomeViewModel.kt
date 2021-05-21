@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.takuji31.compose.navigation.example.model.Blog
+import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.repository.BlogRepository
+import jp.takuji31.compose.navigation.screen.screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +19,8 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+    private val screen: ExampleScreen.Home by savedStateHandle.screen()
+
     private val _state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
     val state: MutableStateFlow<State>
         get() = _state
@@ -26,6 +30,9 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             load()
+            if (screen.fromDeepLink) {
+                showSnackBar(screen.deepLinkOnlyArg)
+            }
         }
     }
 
@@ -41,7 +48,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    suspend fun showSnackBar(deepLinkOnlyArg: String?) {
+    private suspend fun showSnackBar(deepLinkOnlyArg: String?) {
         snackbarHostState.showSnackbar("Hello $deepLinkOnlyArg from Deep Link")
     }
 

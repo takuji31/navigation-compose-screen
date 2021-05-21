@@ -29,4 +29,11 @@ val Parcelable = ClassName.bestGuess("android.os.Parcelable")
 
 // region Android
 val Uri = ClassName.bestGuess("android.net.Uri")
-//
+val Bundle = ClassName.bestGuess("android.os.Bundle")
+val SavedStateHandle = ClassName.bestGuess("androidx.lifecycle.SavedStateHandle")
+// endregion
+
+// region Library
+val ScreenFactory = ClassName.bestGuess("jp.takuji31.compose.navigation.screen.ScreenFactory")
+val ScreenFactoryRegistry = ClassName.bestGuess("jp.takuji31.compose.navigation.screen.ScreenFactoryRegistry")
+// endregion

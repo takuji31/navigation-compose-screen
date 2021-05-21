@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.takuji31.compose.navigation.example.model.Blog
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.repository.BlogRepository
-import jp.takuji31.compose.navigation.screen.KEY_SCREEN
+import jp.takuji31.compose.navigation.screen.screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class BlogViewModel @Inject constructor(
     private val blogRepository: BlogRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    val screen: ExampleScreen.Blog = checkNotNull(savedStateHandle.get(KEY_SCREEN))
+    val screen: ExampleScreen.Blog by savedStateHandle.screen()
 
     private val _state = MutableStateFlow<State>(State.Loading)
     val state: StateFlow<State>

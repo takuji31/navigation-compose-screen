@@ -9,7 +9,7 @@ import jp.takuji31.compose.navigation.example.model.Entry
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.repository.BlogRepository
 import jp.takuji31.compose.navigation.example.repository.EntryRepository
-import jp.takuji31.compose.navigation.screen.KEY_SCREEN
+import jp.takuji31.compose.navigation.screen.screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class EntryViewModel @Inject constructor(
     private val entryRepository: EntryRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val screen: ExampleScreen.Entry = checkNotNull(savedStateHandle.get(KEY_SCREEN))
+    private val screen: ExampleScreen.Entry by savedStateHandle.screen()
 
     private val _state = MutableStateFlow<State>(State.Loading)
     val state: StateFlow<State>

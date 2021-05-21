@@ -1,12 +1,24 @@
 package jp.takuji31.compose.navigation.compiler.model
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.BOOLEAN
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.INT
+import com.squareup.kotlinpoet.LONG
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
+import com.squareup.kotlinpoet.STRING
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
 import com.squareup.kotlinpoet.metadata.toImmutableKmClass
 import jp.takuji31.compose.navigation.compiler.NavType
 import jp.takuji31.compose.navigation.compiler.navArgument
-import jp.takuji31.compose.navigation.screen.annotation.*
+import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
+import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
+import jp.takuji31.compose.navigation.screen.annotation.FloatArgument
+import jp.takuji31.compose.navigation.screen.annotation.IntArgument
+import jp.takuji31.compose.navigation.screen.annotation.LongArgument
+import jp.takuji31.compose.navigation.screen.annotation.StringArgument
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.util.Elements
 
@@ -21,6 +33,24 @@ data class Arg constructor(
 
     val typeNameWithNullability: TypeName by lazy { typeName.copy(nullable = isNullable) }
 
+    val defaultValueLiteral: CodeBlock by lazy {
+        check(hasDefaultValue) { error("$this has no default value") }
+
+        if (type == Type.Enum) {
+            CodeBlock.builder()
+                .add(
+                    "%T.%M",
+                    this.typeName,
+                    MemberName(this.typeName as ClassName, defaultValue as String),
+                )
+                .build()
+        } else {
+            CodeBlock.builder()
+                .add("%L", defaultValue)
+                .build()
+        }
+    }
+
     val navArgsExtensionStatement: CodeBlock by lazy {
         val codeBlock = CodeBlock.builder()
             .addStatement("%M(%S) {", navArgument, name)
@@ -34,22 +64,16 @@ data class Arg constructor(
                 "type = %T.%M(%T::class.java)", NavType, navType,
                 this.typeName,
             )
-            if (hasDefaultValue) {
-                checkNotNull(defaultValue) { "Enum default value cannot be null. at: $name" }
-                codeBlock.addStatement(
-                    "defaultValue = %T.%M",
-                    this.typeName,
-                    MemberName(this.typeName as ClassName, defaultValue as String),
-                )
-            }
         } else {
             codeBlock.addStatement("type = %T.%N", NavType, NavType.member(typeName))
-            if (hasDefaultValue) {
-                check(defaultValue != null || isNullable) {
-                    "DefaultValue cannot be null when argument is not nullable. at: $name"
-                }
-                codeBlock.addStatement("defaultValue = %L", defaultValue)
+        }
+        if (hasDefaultValue) {
+            check(type != Type.Enum || defaultValue != null) { "Enum default value cannot be null. at: $name" }
+            check(defaultValue != null || isNullable) {
+                "DefaultValue cannot be null when argument is not nullable. at: $name"
             }
+            codeBlock
+                .addStatement("defaultValue = %L", defaultValueLiteral)
         }
 
         codeBlock.addStatement("nullable = %L", isNullable)

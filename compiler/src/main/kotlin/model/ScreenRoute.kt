@@ -107,6 +107,10 @@ data class ScreenRoute(
             .map { checkNotNull(navArgs[it]) }
     }
 
+    val isAllArgsOptional: Boolean by lazy {
+        args.all { it.hasDefaultValue }
+    }
+
     private fun String.extractParameters() =
         argPattern.findAll(this).map { it.groupValues[1] }.toList()
 

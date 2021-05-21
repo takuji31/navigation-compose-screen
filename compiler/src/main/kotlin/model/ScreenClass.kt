@@ -13,10 +13,14 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.UNIT
+import jp.takuji31.compose.navigation.compiler.Bundle
 import jp.takuji31.compose.navigation.compiler.ComposableAnnotation
 import jp.takuji31.compose.navigation.compiler.NavGraphBuilder
 import jp.takuji31.compose.navigation.compiler.Parcelable
 import jp.takuji31.compose.navigation.compiler.Parcelize
+import jp.takuji31.compose.navigation.compiler.SavedStateHandle
+import jp.takuji31.compose.navigation.compiler.ScreenFactory
+import jp.takuji31.compose.navigation.compiler.ScreenFactoryRegistry
 import jp.takuji31.compose.navigation.compiler.composable
 
 data class ScreenClass(
@@ -55,11 +59,11 @@ data class ScreenClass(
                     .initializer("%N", screenIdParameter).build(),
             )
         val screenChildren = routes.map { screenRoute ->
-            val valueClassName = className.nestedClass(screenRoute.bestTypeName)
+            val routeClassName = screenRoute.nestedTypeName
             val builder = if (screenRoute.hasArgs) {
-                TypeSpec.classBuilder(valueClassName)
+                TypeSpec.classBuilder(routeClassName)
             } else {
-                TypeSpec.objectBuilder(valueClassName)
+                TypeSpec.objectBuilder(routeClassName)
             }
             builder.superclass(className)
                 .addAnnotation(Parcelize)
@@ -78,6 +82,20 @@ data class ScreenClass(
                         )
                         .build(),
                 )
+
+            val fromBundleBuilder = FunSpec
+                .builder("fromBundle")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter("bundle", Bundle.copy(nullable = true))
+                .returns(routeClassName)
+            val fromSavedStateHandleBuilder = FunSpec
+                .builder("fromSavedStateHandle")
+                .addParameter("savedStateHandle", SavedStateHandle)
+                .addModifiers(KModifier.OVERRIDE)
+                .returns(routeClassName)
+            val factoryInitCode = CodeBlock.builder()
+                .addStatement("%T.%N(%S, %T::class, this)", ScreenFactoryRegistry, ScreenFactoryRegistry.member("register"), screenRoute.annotation.route, routeClassName)
+                .build()
 
             if (screenRoute.hasArgs) {
                 val parameterizedRouteProperty =
@@ -113,6 +131,96 @@ data class ScreenClass(
                         .build(),
                 )
                 builder.addProperty(parameterizedRouteProperty.build())
+                val nestedClassSimpleName = routeClassName.simpleNames.joinToString(".")
+
+                if (screenRoute.isAllArgsOptional) {
+                    fromBundleBuilder
+                        .addStatement("bundle ?: return %T()", routeClassName)
+                } else {
+                    fromBundleBuilder
+                        .beginControlFlow("checkNotNull(bundle)")
+                        .addStatement("error(%S)", "Screen $nestedClassSimpleName has non-optional parameter")
+                        .endControlFlow()
+                }
+
+                val initializerBlockBuilder = CodeBlock
+                    .builder()
+                    .add("return %T(\n", routeClassName)
+                    .indent()
+                screenRoute.args.forEach { arg ->
+                    when {
+                        !arg.isNullable && !arg.hasDefaultValue -> {
+                            // always not null
+                            fromBundleBuilder.addStatement(
+                                "val %1N = bundle[%1S] as? %2T ?: error(%3S)",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                                "Screen $nestedClassSimpleName requires parameter: ${arg.name}",
+                            )
+                            fromSavedStateHandleBuilder.addStatement(
+                                "val %1N = savedStateHandle.get(%1S) as? %2T ?: error(%3S)",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                                "Screen $nestedClassSimpleName requires parameter: ${arg.name}",
+                            )
+                        }
+                        arg.hasDefaultValue && arg.defaultValue != null -> {
+                            // with default value
+                            fromBundleBuilder.addStatement(
+                                "val %1N = bundle[%1S] as? %2T ?: %3L",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                                arg.defaultValueLiteral,
+                            )
+                            fromSavedStateHandleBuilder.addStatement(
+                                "val %1N = savedStateHandle.get(%1S) as? %2T ?: %3L",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                                arg.defaultValueLiteral,
+                            )
+                        }
+                        else -> {
+                            // with default value
+                            fromBundleBuilder.addStatement(
+                                "val %1N = bundle[%1S] as? %2T",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                            )
+                            fromSavedStateHandleBuilder.addStatement(
+                                "val %1N = savedStateHandle.get(%1S) as? %2T",
+                                arg.name,
+                                arg.typeNameWithNullability,
+                            )
+                        }
+                    }
+                    initializerBlockBuilder.add("%N = %N,\n", arg.name, arg.name)
+                }
+
+                val initializerBlock = initializerBlockBuilder.unindent().add(")").build()
+                fromBundleBuilder.addCode(initializerBlock)
+                fromSavedStateHandleBuilder.addCode(initializerBlock)
+
+                val companionObjectBuilder = TypeSpec.companionObjectBuilder()
+                    .addSuperinterface(ScreenFactory.parameterizedBy(routeClassName))
+                    .addInitializerBlock(factoryInitCode)
+                    .addFunction(fromBundleBuilder.build())
+                    .addFunction(fromSavedStateHandleBuilder.build())
+
+                builder.addType(companionObjectBuilder.build())
+            } else {
+                builder
+                    .addSuperinterface(ScreenFactory.parameterizedBy(routeClassName))
+                    .addInitializerBlock(factoryInitCode)
+                    .addFunction(
+                        fromBundleBuilder
+                            .addCode("return this")
+                            .build(),
+                    )
+                    .addFunction(
+                        fromSavedStateHandleBuilder
+                            .addCode("return this")
+                            .build(),
+                    )
             }
             builder.build()
         }
@@ -186,44 +294,14 @@ data class ScreenClass(
                     navGraphBuilder,
                     composable,
                     enumClassName,
-                    MemberName(enumClassName, route.name),
+                    enumClassName.member(route.name),
                 )
             }
 
             val lambdaCodeBlock = CodeBlock.builder()
                 .indent()
-            if (route.hasArgs) {
-                val argumentsCodeBlock =
-                    CodeBlock.builder().addStatement("val arguments = checkNotNull(it.arguments)")
-                route.args.forEach { arg ->
-                    argumentsCodeBlock.addStatement(
-                        "val %N = arguments[%S] as %T",
-                        arg.name,
-                        arg.name,
-                        arg.typeNameWithNullability,
-                    )
-                }
-                lambdaCodeBlock.add(argumentsCodeBlock.build())
-
-                val initializerBlock = CodeBlock.builder()
-                    .addStatement("val screen = %T(", className.nestedClass(route.bestTypeName))
-                    .indent()
-                route.args.forEach { arg ->
-                    initializerBlock.addStatement(
-                        "%N = %N,",
-                        arg.name,
-                        arg.name,
-                    )
-                }
-                initializerBlock.unindent().addStatement(")")
-                lambdaCodeBlock.add(initializerBlock.build())
-                lambdaCodeBlock.addStatement("content(screen)")
-            } else {
-                lambdaCodeBlock.addStatement(
-                    "content(%M)",
-                    MemberName(className, route.bestTypeName),
-                )
-            }
+                .addStatement("val screen = %T.fromBundle(it.arguments)", route.nestedTypeName)
+            lambdaCodeBlock.addStatement("content(screen)")
 
             codeBlock.add(lambdaCodeBlock.unindent().build())
             codeBlock.addStatement("}")
@@ -236,4 +314,8 @@ data class ScreenClass(
         spec.addFunctions(functions)
         spec.build()
     }
+
+    private val ScreenRoute.nestedTypeName: ClassName
+        get() = className.nestedClass(bestTypeName)
+
 }

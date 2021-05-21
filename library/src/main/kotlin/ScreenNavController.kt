@@ -1,7 +1,5 @@
 package jp.takuji31.compose.navigation.screen
 
-import android.os.Parcelable
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -17,46 +15,14 @@ class ScreenNavController(val navController: NavHostController) {
     val currentScreen: StateFlow<Screen<Enum<*>>?>
         get() = _currentScreen
 
-    private var onDestinationChanged: ((route: String) -> Screen<*>?)? = null
-
     init {
         navController.addOnDestinationChangedListener { _, destination, args ->
-            args ?: return@addOnDestinationChangedListener
-
             val route = destination.route ?: return@addOnDestinationChangedListener
-            val argsScreen = args[KEY_SCREEN] as? Screen<*>
-            val newScreen = onDestinationChanged?.invoke(route)
-            if (newScreen != null) {
-                // NOTE: Generated screen class always implements Parcelable
-                args.putParcelable(KEY_SCREEN, newScreen as Parcelable)
-                _currentScreen.value = newScreen
-            } else if (argsScreen != null) {
-                // Restore state, BackStack popped etc.
-                _currentScreen.value = argsScreen
-            }
-            onDestinationChanged = null
-        }
-    }
-
-    internal fun setFirstScreen(firstScreen: Screen<*>) {
-        val currentBackStackEntry = navController.currentBackStackEntry ?: return
-        val arguments = checkNotNull(currentBackStackEntry.arguments)
-
-        val route = currentBackStackEntry.destination.route ?: return
-        val argumentScreen = arguments.get(KEY_SCREEN)
-        if (currentScreen.value == null && argumentScreen == null && route == firstScreen.parameterizedRoute) {
-            arguments.putParcelable(KEY_SCREEN, firstScreen as Parcelable)
-            _currentScreen.value = firstScreen
-        }
-        if (currentScreen.value == null) {
-            Log.w("ScreenNavController", "Something's wrong! Current screen not found : $route")
+            _currentScreen.value = ScreenFactoryRegistry.findByRoute<ScreenFactory<*>>(route).fromBundle(args)
         }
     }
 
     fun navigate(screen: Screen<Enum<*>>, builder: NavOptionsBuilder.() -> Unit = {}) {
-        onDestinationChanged = { route ->
-            screen.takeIf { it.route == route }
-        }
         navController.navigate(screen.parameterizedRoute, builder)
     }
 
