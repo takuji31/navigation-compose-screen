@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.0-beta02")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltVersion}")
     }
 }
@@ -21,17 +21,4 @@ allprojects {
 
 tasks.create<Delete>("clean") {
     delete(rootProject.buildDir)
-}
-
-subprojects {
-    configurations.all {
-        resolutionStrategy {
-            eachDependency {
-                // force kotlinx-collections-immutable-jvm version 0.3.3 to 0.3.4 because 0.3.3 is not available on Maven Central
-                if (requested.group == "org.jetbrains.kotlinx" && requested.name == "kotlinx-collections-immutable-jvm" && requested.version == "0.3.3") {
-                    useVersion("0.3.4")
-                }
-            }
-        }
-    }
 }
