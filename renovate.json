@@ -1,0 +1,11 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "local>hatena/renovate-config"
+    ],
+    "gradle": {
+        "fileMatch": [
+            "buildSrc/src/main/kotlin/Versions.kt"
+        ]
+    }
+}
