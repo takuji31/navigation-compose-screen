@@ -13,7 +13,7 @@ java {
 dependencies {
     implementation(project(":annotation"))
     implementation(project(":common"))
-    implementation("com.google.auto:auto-common:0.11")
+    implementation("com.google.auto:auto-common:1.0.1")
     implementation("com.squareup:kotlinpoet:1.8.0")
     implementation("com.google.auto.service:auto-service:1.0")
     implementation("com.squareup:kotlinpoet-metadata:1.8.0")
