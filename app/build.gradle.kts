@@ -100,7 +100,7 @@ dependencies {
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
     implementation("io.coil-kt:coil:1.2.1")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.0")
+    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.2")
 
     implementation("com.jakewharton.timber:timber:4.7.1")
 
