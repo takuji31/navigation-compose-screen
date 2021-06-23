@@ -16,7 +16,7 @@ dependencies {
     implementation("com.google.auto:auto-common:1.0.1")
     implementation("com.squareup:kotlinpoet:1.8.0")
     implementation("com.google.auto.service:auto-service:1.0")
-    implementation("com.squareup:kotlinpoet-metadata:1.8.0")
+    implementation("com.squareup:kotlinpoet-metadata:1.9.0")
     implementation("com.squareup:kotlinpoet-metadata-specs:1.8.0")
     implementation("com.squareup:kotlinpoet-classinspector-elements:1.8.0")
     kapt("com.google.auto.service:auto-service:1.0-rc7")
