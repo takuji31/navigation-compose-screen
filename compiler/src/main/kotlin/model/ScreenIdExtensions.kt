@@ -70,13 +70,13 @@ data class ScreenIdExtensions(
                 screenRoute.annotation.deepLinks.forEach {
                     if (dynamicDeepLinkPrefix) {
                         builderBlock.addStatement(
-                            "%M { uriPattern = prefix + %S }",
+                            "%M { uriPattern = prefix + %S },",
                             navDeepLink,
                             it,
                         )
                     } else {
                         builderBlock.addStatement(
-                            "%M { uriPattern = %S }",
+                            "%M { uriPattern = %S },",
                             navDeepLink, it,
                         )
                     }
