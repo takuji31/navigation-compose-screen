@@ -32,10 +32,11 @@ enum class ExampleScreenId {
     @Route(
         "/blog/{blogId}",
         stringArguments = [StringArgument("blogId")],
+        deepLinks = ["/blog/{blogId}"],
     )
     Blog,
 
-    @Route("/blog/{blogId}/entry/{entryId}")
+    @Route("/blog/{blogId}/entry/{entryId}", deepLinks = ["/blog/{blogId}/entry/{entryId}"])
     Entry,
 
     @Route(

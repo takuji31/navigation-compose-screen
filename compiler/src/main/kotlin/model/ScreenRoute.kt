@@ -43,7 +43,7 @@ data class ScreenRoute(
         routeQuery.extractParameters()
     }
 
-    val args: List<Arg> by lazy {
+    val args: Set<Arg> by lazy {
         val definedArgs = listOf(
             annotation.stringArguments.map { it.name to it },
             annotation.intArguments.map { it.name to it },
@@ -100,11 +100,13 @@ data class ScreenRoute(
             )
         }.toMap()
 
-        val navArgs = definedArgs + generatedArgs + deepLinkArgs
+        val navArgs: Map<String, Arg> = definedArgs + generatedArgs + deepLinkArgs
 
         // order map key by argument order
         (routePathArgNames + routeQueryArgNames + deepLinkArgNames)
             .map { checkNotNull(navArgs[it]) }
+            .distinctBy { it.name }
+            .toSet()
     }
 
     val isAllArgsOptional: Boolean by lazy {
