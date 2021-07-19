@@ -99,9 +99,6 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
-    implementation("io.coil-kt:coil:1.3.0")
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:0.6.2")
-
     implementation("com.jakewharton.timber:timber:4.7.1")
 
     testImplementation("androidx.arch.core:core-testing:2.1.0")
