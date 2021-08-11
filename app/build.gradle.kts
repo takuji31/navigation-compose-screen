@@ -99,7 +99,7 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
     kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
 
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("com.jakewharton.timber:timber:5.0.0")
 
     testImplementation("androidx.arch.core:core-testing:2.1.0")
 
