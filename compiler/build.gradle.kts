@@ -13,7 +13,7 @@ java {
 dependencies {
     implementation(project(":annotation"))
     implementation(project(":common"))
-    implementation("com.google.auto:auto-common:1.1")
+    implementation("com.google.auto:auto-common:1.1.2")
     implementation("com.squareup:kotlinpoet:1.9.0")
     @Suppress("AnnotationProcessorOnCompilePath")
     implementation("com.google.auto.service:auto-service:1.0")
