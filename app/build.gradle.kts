@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = Versions.sdk
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
         applicationId = "jp.takuji31.compose.navigation.example"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = Versions.sdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
