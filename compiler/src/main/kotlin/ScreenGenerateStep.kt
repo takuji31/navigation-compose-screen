@@ -17,6 +17,7 @@ import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
 import jp.takuji31.compose.navigation.screen.Screen
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
+import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.Route
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -89,10 +90,19 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                 element.enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.map {
                     val annotations =
                         it.getAnnotationsByType(Route::class.java)
-                    if (annotations.isEmpty()) {
-                        throw RuntimeException("${element.simpleName}.${it.simpleName} must have Route annotation.")
-                    } else {
+                    val dialogAnnotations =
+                        it.getAnnotationsByType(DialogRoute::class.java)
+                    if (annotations.isEmpty() && dialogAnnotations.isEmpty()) {
+                        throw RuntimeException("${element.simpleName}.${it.simpleName} must have Route or DialogRoute annotation.")
+                    } else if (annotations.isNotEmpty()) {
                         val valueAnnotation = annotations.first()
+                        ScreenRoute(
+                            processingEnv.elementUtils,
+                            it.simpleName.toString(),
+                            valueAnnotation,
+                        )
+                    } else {
+                        val valueAnnotation = dialogAnnotations.first()
                         ScreenRoute(
                             processingEnv.elementUtils,
                             it.simpleName.toString(),

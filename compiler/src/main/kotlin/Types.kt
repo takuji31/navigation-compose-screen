@@ -20,6 +20,7 @@ val navDeepLink = MemberName("androidx.navigation", "navDeepLink")
 val ComposableAnnotation =
     AnnotationSpec.builder(ClassName.bestGuess("androidx.compose.runtime.Composable")).build()
 val composable = MemberName("androidx.navigation.compose", "composable")
+val dialog = MemberName("androidx.navigation.compose", "dialog")
 // endregion
 
 // region Parcelable
@@ -35,5 +36,6 @@ val SavedStateHandle = ClassName.bestGuess("androidx.lifecycle.SavedStateHandle"
 
 // region Library
 val ScreenFactory = ClassName.bestGuess("jp.takuji31.compose.navigation.screen.ScreenFactory")
-val ScreenFactoryRegistry = ClassName.bestGuess("jp.takuji31.compose.navigation.screen.ScreenFactoryRegistry")
+val ScreenFactoryRegistry =
+    ClassName.bestGuess("jp.takuji31.compose.navigation.screen.ScreenFactoryRegistry")
 // endregion

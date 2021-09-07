@@ -37,6 +37,7 @@ val ExampleScreen.title: String
         is ExampleScreen.Entry -> "Entry $entryId"
         is ExampleScreen.Ranking -> "${rankingType.name} ranking"
         ExampleScreen.Settings -> "Settings"
+        ExampleScreen.About -> "About"
     }
 
 @Composable

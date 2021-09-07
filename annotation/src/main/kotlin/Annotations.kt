@@ -24,6 +24,19 @@ annotation class Route(
     val enumArguments: Array<EnumArgument> = [],
 )
 
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FIELD)
+annotation class DialogRoute(
+    val route: String,
+    val deepLinks: Array<String> = [],
+    val stringArguments: Array<StringArgument> = [],
+    val intArguments: Array<IntArgument> = [],
+    val longArguments: Array<LongArgument> = [],
+    val booleanArguments: Array<BooleanArgument> = [],
+    val floatArguments: Array<FloatArgument> = [],
+    val enumArguments: Array<EnumArgument> = [],
+)
+
 /**
  * [String] argument annotation.
  *

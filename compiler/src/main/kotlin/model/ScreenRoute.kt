@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.STRING
 import jp.takuji31.compose.navigation.compiler.toCamelCase
 import jp.takuji31.compose.navigation.compiler.toLowerCamelCase
 import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
+import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
 import jp.takuji31.compose.navigation.screen.annotation.FloatArgument
 import jp.takuji31.compose.navigation.screen.annotation.IntArgument
@@ -15,7 +16,15 @@ import javax.lang.model.util.Elements
 data class ScreenRoute(
     val elements: Elements,
     val name: String,
-    val annotation: Route,
+    val routeType: RouteType,
+    val route: String,
+    val deepLinks: List<String>,
+    val stringArguments: List<StringArgument>,
+    val intArguments: List<IntArgument>,
+    val longArguments: List<LongArgument>,
+    val booleanArguments: List<BooleanArgument>,
+    val floatArguments: List<FloatArgument>,
+    val enumArguments: List<EnumArgument>,
 ) {
     val bestTypeName: String by lazy {
         name.toCamelCase()
@@ -26,14 +35,14 @@ data class ScreenRoute(
     }
 
     val hasArgs: Boolean by lazy {
-        annotation.route.contains(argPattern) || annotation.deepLinks.any { it.contains(argPattern) }
+        route.contains(argPattern) || deepLinks.any { it.contains(argPattern) }
     }
 
     val hasDeepLinks: Boolean by lazy {
-        annotation.deepLinks.isNotEmpty()
+        deepLinks.isNotEmpty()
     }
 
-    private val routePathAndQuery by lazy { annotation.route.split("?", limit = 2) }
+    private val routePathAndQuery by lazy { route.split("?", limit = 2) }
     private val routePath: String by lazy { routePathAndQuery[0] }
     private val routeQuery: String by lazy { routePathAndQuery.getOrNull(1) ?: "" }
     private val routePathArgNames: List<String> by lazy {
@@ -45,12 +54,12 @@ data class ScreenRoute(
 
     val args: Set<Arg> by lazy {
         val definedArgs = listOf(
-            annotation.stringArguments.map { it.name to it },
-            annotation.intArguments.map { it.name to it },
-            annotation.longArguments.map { it.name to it },
-            annotation.booleanArguments.map { it.name to it },
-            annotation.floatArguments.map { it.name to it },
-            annotation.enumArguments.map { it.name to it },
+            stringArguments.map { it.name to it },
+            intArguments.map { it.name to it },
+            longArguments.map { it.name to it },
+            booleanArguments.map { it.name to it },
+            floatArguments.map { it.name to it },
+            enumArguments.map { it.name to it },
         )
             .flatten()
             .groupBy { it.first }
@@ -88,7 +97,7 @@ data class ScreenRoute(
             ).toMap()
 
         val deepLinkArgNames =
-            annotation.deepLinks.map { deepLink -> deepLink.extractParameters() }.flatten()
+            deepLinks.map { deepLink -> deepLink.extractParameters() }.flatten()
         val deepLinkArgs = (deepLinkArgNames - (definedKeys + generatedArgs.keys)).map {
             it to Arg(
                 type = Arg.Type.String,
@@ -128,5 +137,49 @@ data class ScreenRoute(
 
     companion object {
         private val argPattern = """\{([^/}]+)}""".toRegex()
+
+        operator fun invoke(
+            elements: Elements,
+            name: String,
+            route: Route,
+        ): ScreenRoute {
+            return ScreenRoute(
+                elements,
+                name,
+                RouteType.Default,
+                route.route,
+                route.deepLinks.toList(),
+                route.stringArguments.toList(),
+                route.intArguments.toList(),
+                route.longArguments.toList(),
+                route.booleanArguments.toList(),
+                route.floatArguments.toList(),
+                route.enumArguments.toList(),
+            )
+        }
+
+        operator fun invoke(
+            elements: Elements,
+            name: String,
+            route: DialogRoute,
+        ): ScreenRoute {
+            return ScreenRoute(
+                elements,
+                name,
+                RouteType.Dialog,
+                route.route,
+                route.deepLinks.toList(),
+                route.stringArguments.toList(),
+                route.intArguments.toList(),
+                route.longArguments.toList(),
+                route.booleanArguments.toList(),
+                route.floatArguments.toList(),
+                route.enumArguments.toList(),
+            )
+        }
+    }
+
+    enum class RouteType {
+        Default, Dialog
     }
 }

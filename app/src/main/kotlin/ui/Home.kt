@@ -5,8 +5,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -24,6 +31,7 @@ fun Home(
     screen: ExampleScreen.Home,
     onReloadButtonClick: () -> Unit,
     onSettingsButtonClick: () -> Unit,
+    onAboutClick: () -> Unit,
     onBottomSheetItemClicked: (ExampleScreen) -> Unit,
     onItemClick: (Blog) -> Unit,
 ) {
@@ -41,6 +49,11 @@ fun Home(
                 onClick = onSettingsButtonClick,
             ) {
                 Icon(Icons.Default.Settings, contentDescription = "Settings")
+            }
+            IconButton(
+                onClick = onAboutClick,
+            ) {
+                Icon(Icons.Default.Info, contentDescription = "About")
             }
         },
         onBottomSheetItemClicked = onBottomSheetItemClicked,

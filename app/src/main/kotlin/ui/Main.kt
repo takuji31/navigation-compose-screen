@@ -46,6 +46,7 @@ fun Main(navController: ScreenNavController) {
                     onBottomSheetItemClicked = onBottomSheetItemClicked,
                     onReloadButtonClick = { viewModel.reload() },
                     onSettingsButtonClick = { navController.navigate(ExampleScreen.Settings) },
+                    onAboutClick = { navController.navigate(ExampleScreen.About) },
                     onItemClick = { navController.navigate(ExampleScreen.Blog(it.id)) },
                 )
             }
@@ -91,6 +92,11 @@ fun Main(navController: ScreenNavController) {
                     onBottomSheetItemClicked = { navController.navigate(it) },
                 ) {
                     Text(text = "This is settings")
+                }
+            }
+            about {
+                About {
+                    navController.popBackStack()
                 }
             }
         }

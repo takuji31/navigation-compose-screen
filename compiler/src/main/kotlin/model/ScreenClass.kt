@@ -22,6 +22,9 @@ import jp.takuji31.compose.navigation.compiler.SavedStateHandle
 import jp.takuji31.compose.navigation.compiler.ScreenFactory
 import jp.takuji31.compose.navigation.compiler.ScreenFactoryRegistry
 import jp.takuji31.compose.navigation.compiler.composable
+import jp.takuji31.compose.navigation.compiler.dialog
+import jp.takuji31.compose.navigation.compiler.model.ScreenRoute.RouteType.Default
+import jp.takuji31.compose.navigation.compiler.model.ScreenRoute.RouteType.Dialog
 
 data class ScreenClass(
     val className: ClassName,
@@ -94,14 +97,20 @@ data class ScreenClass(
                 .addModifiers(KModifier.OVERRIDE)
                 .returns(routeClassName)
             val factoryInitCode = CodeBlock.builder()
-                .addStatement("%T.%N(%S, %T::class, this)", ScreenFactoryRegistry, ScreenFactoryRegistry.member("register"), screenRoute.annotation.route, routeClassName)
+                .addStatement(
+                    "%T.%N(%S, %T::class, this)",
+                    ScreenFactoryRegistry,
+                    ScreenFactoryRegistry.member("register"),
+                    screenRoute.route,
+                    routeClassName,
+                )
                 .build()
 
             if (screenRoute.hasArgs) {
                 val parameterizedRouteProperty =
                     PropertySpec.builder("parameterizedRoute", STRING, KModifier.OVERRIDE)
                 val constructor = FunSpec.constructorBuilder()
-                var route = screenRoute.annotation.route
+                var route = screenRoute.route
 
                 val constructorParameters =
                     screenRoute.args.map {
@@ -139,7 +148,10 @@ data class ScreenClass(
                 } else {
                     fromBundleBuilder
                         .beginControlFlow("checkNotNull(bundle)")
-                        .addStatement("error(%S)", "Screen $nestedClassSimpleName has non-optional parameter")
+                        .addStatement(
+                            "error(%S)",
+                            "Screen $nestedClassSimpleName has non-optional parameter",
+                        )
                         .endControlFlow()
                 }
 
@@ -283,7 +295,10 @@ data class ScreenClass(
                 codeBlock.addStatement(
                     "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks(%5N)) {",
                     navGraphBuilder,
-                    composable,
+                    when (route.routeType) {
+                        Default -> composable
+                        Dialog -> dialog
+                    },
                     enumClassName,
                     MemberName(enumClassName, route.name),
                     deepLinkPrefixName,

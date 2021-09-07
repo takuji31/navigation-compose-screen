@@ -26,7 +26,7 @@ data class ScreenIdExtensions(
     }
     private val routeExtensionSpec: PropertySpec by lazy {
         createEnumExtensionPropertySpec("route", STRING) { value, member ->
-            addStatement("%M -> %S", member, value.annotation.route)
+            addStatement("%M -> %S", member, value.route)
         }
     }
 
@@ -67,7 +67,7 @@ data class ScreenIdExtensions(
                 codeBlock.addStatement("%M -> listOf(", MemberName(idClassName, screenRoute.name))
 
                 val builderBlock = CodeBlock.builder().indent()
-                screenRoute.annotation.deepLinks.forEach {
+                screenRoute.deepLinks.forEach {
                     if (dynamicDeepLinkPrefix) {
                         builderBlock.addStatement(
                             "%M { uriPattern = prefix + %S },",
