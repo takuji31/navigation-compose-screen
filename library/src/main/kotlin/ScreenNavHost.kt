@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 fun ScreenNavHost(
     navController: ScreenNavController,
     startScreen: Screen<*>,
-    builder: NavGraphBuilder.() -> Unit,
     modifier: Modifier = Modifier,
+    builder: NavGraphBuilder.() -> Unit,
 ) {
     NavHost(
         navController = navController.navController,
