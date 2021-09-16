@@ -8,11 +8,11 @@ import com.squareup.kotlinpoet.MemberName
 val NavGraphBuilder = ClassName.bestGuess("androidx.navigation.NavGraphBuilder")
 val NavType = ClassName.bestGuess("androidx.navigation.NavType")
 val NavDeepLink = ClassName.bestGuess("androidx.navigation.NavDeepLink")
-val NamedNavArgument = ClassName.bestGuess("androidx.navigation.compose.NamedNavArgument")
+val NamedNavArgument = ClassName.bestGuess("androidx.navigation.NamedNavArgument")
 val NavOptionsBuilder = ClassName.bestGuess("androidx.navigation.NavOptionsBuilder")
 val PopUpToBuilder = ClassName.bestGuess("androidx.navigation.PopUpToBuilder")
 
-val navArgument = MemberName("androidx.navigation.compose", "navArgument")
+val navArgument = MemberName("androidx.navigation", "navArgument")
 val navDeepLink = MemberName("androidx.navigation", "navDeepLink")
 // endregion
 
