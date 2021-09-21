@@ -17,7 +17,7 @@ dependencies {
     implementation("com.squareup:kotlinpoet:1.9.0")
     @Suppress("AnnotationProcessorOnCompilePath")
     implementation("com.google.auto.service:auto-service:1.0")
-    implementation("com.squareup:kotlinpoet-metadata:1.9.0")
+    implementation("com.squareup:kotlinpoet-metadata:1.10.1")
     implementation("com.squareup:kotlinpoet-metadata-specs:1.9.0")
     implementation("com.squareup:kotlinpoet-classinspector-elements:1.9.0")
     kapt("com.google.auto.service:auto-service:1.0")
