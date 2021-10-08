@@ -7,16 +7,16 @@ val String.mayBeCamelCase: Boolean get() = camelCasePattern.matches(this)
 
 fun String.toCamelCase() = if (contains("_")) {
     split("_").joinToString("") {
-        it.first().toUpperCase() + it.drop(1).toLowerCase(
-            Locale.getDefault(),
+        it.first().uppercaseChar() + it.drop(1).lowercase(
+            Locale.getDefault()
         )
     }
 } else if (!mayBeCamelCase) {
-    first().toUpperCase() + drop(1).toLowerCase(Locale.getDefault())
+    first().uppercaseChar() + drop(1).lowercase(Locale.getDefault())
 } else {
     this
 }
 
 fun String.toLowerCamelCase() = toCamelCase().let {
-    it.first().toLowerCase() + it.drop(1)
+    it.first().lowercaseChar() + it.drop(1)
 }
