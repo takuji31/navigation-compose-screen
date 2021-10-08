@@ -4,12 +4,11 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.ImmutableSetMultimap
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.metadata.ImmutableKmClass
 import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
 import com.squareup.kotlinpoet.metadata.isAbstract
 import com.squareup.kotlinpoet.metadata.isInterface
 import com.squareup.kotlinpoet.metadata.isOpen
-import com.squareup.kotlinpoet.metadata.toImmutableKmClass
+import com.squareup.kotlinpoet.metadata.toKmClass
 import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
 import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
@@ -19,6 +18,7 @@ import jp.takuji31.compose.navigation.screen.Screen
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.Route
+import kotlinx.metadata.KmClass
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -68,8 +68,8 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                 return@forEach
             }
 
-            val screenBaseClass: ImmutableKmClass = screenBaseType.toImmutableKmClass()
-            if ((!screenBaseClass.isAbstract && !screenBaseClass.isOpen) || screenBaseClass.typeParameters.size != 1) {
+            val screenBaseClass: KmClass = screenBaseType.toKmClass()
+            if ((!screenBaseClass.flags.isAbstract && !screenBaseClass.flags.isOpen) || screenBaseClass.typeParameters.size != 1) {
                 processingEnv.messager.printMessage(
                     Diagnostic.Kind.ERROR,
                     "AutoScreenId.screenBaseClass can use only single parameterized open class",

@@ -10,7 +10,7 @@ import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
-import com.squareup.kotlinpoet.metadata.toImmutableKmClass
+import com.squareup.kotlinpoet.metadata.toKmClass
 import jp.takuji31.compose.navigation.compiler.NavType
 import jp.takuji31.compose.navigation.compiler.navArgument
 import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
@@ -133,9 +133,9 @@ data class Arg constructor(
         @OptIn(KotlinPoetMetadataPreview::class)
         fun from(elements: Elements, enumArgument: EnumArgument): Arg {
             val kmClass = try {
-                enumArgument.enumClass.toImmutableKmClass()
+                enumArgument.enumClass.toKmClass()
             } catch (e: MirroredTypeException) {
-                elements.getTypeElement(e.typeMirror.toString()).toImmutableKmClass()
+                elements.getTypeElement(e.typeMirror.toString()).toKmClass()
             }
 
             val defaultValue = enumArgument.defaultValue.takeIf { it != "@null" }
