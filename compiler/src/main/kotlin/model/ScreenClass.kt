@@ -96,15 +96,6 @@ data class ScreenClass(
                 .addParameter("savedStateHandle", SavedStateHandle)
                 .addModifiers(KModifier.OVERRIDE)
                 .returns(routeClassName)
-            val factoryInitCode = CodeBlock.builder()
-                .addStatement(
-                    "%T.%N(%S, %T::class, this)",
-                    ScreenFactoryRegistry,
-                    ScreenFactoryRegistry.member("register"),
-                    screenRoute.route,
-                    routeClassName,
-                )
-                .build()
 
             if (screenRoute.hasArgs) {
                 val parameterizedRouteProperty =
@@ -214,7 +205,6 @@ data class ScreenClass(
 
                 val companionObjectBuilder = TypeSpec.companionObjectBuilder()
                     .addSuperinterface(ScreenFactory.parameterizedBy(routeClassName))
-                    .addInitializerBlock(factoryInitCode)
                     .addFunction(fromBundleBuilder.build())
                     .addFunction(fromSavedStateHandleBuilder.build())
 
@@ -222,7 +212,6 @@ data class ScreenClass(
             } else {
                 builder
                     .addSuperinterface(ScreenFactory.parameterizedBy(routeClassName))
-                    .addInitializerBlock(factoryInitCode)
                     .addFunction(
                         fromBundleBuilder
                             .addCode("return this")
@@ -272,6 +261,22 @@ data class ScreenClass(
         }
 
         spec.addProperty(navGraphBuilder)
+
+        val factoryInitCodes = CodeBlock.builder()
+
+        routes.forEach { screenRoute ->
+            val routeClassName = screenRoute.nestedTypeName
+            factoryInitCodes.addStatement(
+                "%T.%N(%S, %T::class, %T)",
+                ScreenFactoryRegistry,
+                ScreenFactoryRegistry.member("register"),
+                screenRoute.route,
+                routeClassName,
+                routeClassName,
+            )
+        }
+
+        spec.addInitializerBlock(factoryInitCodes.build())
 
         val functions = routes.map { route ->
             val contentParameter = ParameterSpec.builder(
