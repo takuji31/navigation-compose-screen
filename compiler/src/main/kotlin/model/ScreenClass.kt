@@ -65,6 +65,7 @@ data class ScreenClass(
             val routeClassName = screenRoute.nestedTypeName
             val builder = if (screenRoute.hasArgs) {
                 TypeSpec.classBuilder(routeClassName)
+                    .addModifiers(KModifier.DATA)
             } else {
                 TypeSpec.objectBuilder(routeClassName)
             }
