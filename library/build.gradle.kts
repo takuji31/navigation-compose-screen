@@ -56,7 +56,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
 
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
     implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
     implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
 
