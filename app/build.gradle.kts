@@ -75,7 +75,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleVersion}")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("com.google.android.material:material:1.4.0")
 
     implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
