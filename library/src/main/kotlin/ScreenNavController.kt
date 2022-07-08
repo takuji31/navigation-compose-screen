@@ -2,8 +2,10 @@ package jp.takuji31.compose.navigation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,8 +33,10 @@ class ScreenNavController(val navController: NavHostController) {
 }
 
 @Composable
-fun rememberScreenNavController(): ScreenNavController {
-    val navController = rememberNavController()
+fun rememberScreenNavController(
+    vararg navigators: Navigator<out NavDestination>
+): ScreenNavController {
+    val navController = rememberNavController(*navigators)
     return remember(navController) {
         ScreenNavController(navController)
     }
