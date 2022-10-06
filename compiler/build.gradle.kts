@@ -18,7 +18,7 @@ dependencies {
     implementation("com.squareup:kotlinpoet:1.10.1")
     @Suppress("AnnotationProcessorOnCompilePath")
     implementation("com.google.auto.service:auto-service:1.0.1")
-    implementation("com.squareup:kotlinpoet-metadata:1.10.1")
+    implementation("com.squareup:kotlinpoet-metadata:1.12.0")
     kapt("com.google.auto.service:auto-service:1.0.1")
     compileOnly("net.ltgt.gradle.incap:incap:0.3")
     kapt("net.ltgt.gradle.incap:incap-processor:0.3")
