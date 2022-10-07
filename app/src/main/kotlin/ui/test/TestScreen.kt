@@ -9,10 +9,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import jp.takuji31.compose.navigation.screen.ScreenNavController
 import jp.takuji31.compose.navigation.screen.ScreenNavHost
-import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.ScreenId
 
-@AutoScreenId("TestingScreen")
+@ScreenId("TestingScreen")
 enum class TestingScreenId {
     @Route("/")
     Home,

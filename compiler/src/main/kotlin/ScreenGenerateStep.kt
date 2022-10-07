@@ -4,15 +4,14 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.ImmutableSetMultimap
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
 import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
 import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
 import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
-import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.ScreenId
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -22,9 +21,8 @@ import javax.tools.Diagnostic
 class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
     BasicAnnotationProcessor.Step {
     override fun annotations(): MutableSet<String> =
-        mutableSetOf(AutoScreenId::class.java.name)
+        mutableSetOf(ScreenId::class.java.name)
 
-    @OptIn(KotlinPoetMetadataPreview::class)
     override fun process(elementsByAnnotation: ImmutableSetMultimap<String, Element>?): MutableSet<out Element> {
         elementsByAnnotation?.forEach { _, element ->
             if (element.kind != ElementKind.ENUM) {
@@ -37,7 +35,7 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
 
             val packageName = getPackageName(element)
             val annotation =
-                element.getAnnotation(AutoScreenId::class.java)
+                element.getAnnotation(ScreenId::class.java)
 
             val screenClassSimpleName =
                 annotation.screenClassName
