@@ -7,13 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import jp.takuji31.compose.navigation.example.navigation.MyScreen
 import jp.takuji31.compose.navigation.screen.ScreenNavController
 import jp.takuji31.compose.navigation.screen.ScreenNavHost
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.Route
 
-@AutoScreenId("TestingScreen", screenBaseClass = MyScreen::class)
+@AutoScreenId("TestingScreen")
 enum class TestingScreenId {
     @Route("/")
     Home,

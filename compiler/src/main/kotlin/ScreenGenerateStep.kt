@@ -5,25 +5,18 @@ import com.google.common.collect.ImmutableSetMultimap
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
-import com.squareup.kotlinpoet.metadata.isAbstract
-import com.squareup.kotlinpoet.metadata.isInterface
-import com.squareup.kotlinpoet.metadata.isOpen
-import com.squareup.kotlinpoet.metadata.toKmClass
 import jp.takuji31.compose.navigation.compiler.model.ComposeBuilderFunction
 import jp.takuji31.compose.navigation.compiler.model.NavOptionsBuilderExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenClass
 import jp.takuji31.compose.navigation.compiler.model.ScreenIdExtensions
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute
-import jp.takuji31.compose.navigation.screen.Screen
 import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.Route
-import kotlinx.metadata.KmClass
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.PackageElement
-import javax.lang.model.type.MirroredTypeException
 import javax.tools.Diagnostic
 
 class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
@@ -45,37 +38,6 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
             val packageName = getPackageName(element)
             val annotation =
                 element.getAnnotation(AutoScreenId::class.java)
-
-            val screenBaseType = try {
-                processingEnv.elementUtils.getTypeElement(annotation.screenBaseClass.qualifiedName)
-            } catch (e: MirroredTypeException) {
-                val classType = e.typeMirror
-                processingEnv.elementUtils.getTypeElement(classType.toString())
-            }
-
-            val screenElement =
-                processingEnv.elementUtils.getTypeElement(Screen::class.qualifiedName)
-            val erasureType = processingEnv.typeUtils.erasure(screenBaseType.asType())
-            if (!processingEnv.typeUtils.isAssignable(
-                    erasureType,
-                    screenElement.asType(),
-                )
-            ) {
-                processingEnv.messager.printMessage(
-                    Diagnostic.Kind.ERROR,
-                    "AutoScreenId.screenBaseClass can use only subtype of ${Screen::class.qualifiedName} current: $screenBaseType",
-                )
-                return@forEach
-            }
-
-            val screenBaseClass: KmClass = screenBaseType.toKmClass()
-            if ((!screenBaseClass.flags.isAbstract && !screenBaseClass.flags.isOpen) || screenBaseClass.typeParameters.size != 1) {
-                processingEnv.messager.printMessage(
-                    Diagnostic.Kind.ERROR,
-                    "AutoScreenId.screenBaseClass can use only single parameterized open class",
-                )
-                return@forEach
-            }
 
             val screenClassSimpleName =
                 annotation.screenClassName
@@ -111,15 +73,12 @@ class ScreenGenerateStep(private val processingEnv: ProcessingEnvironment) :
                     }
                 }.toList()
 
-            val screenBaseClassName = ClassName.bestGuess(screenBaseClass.name.replace("/", "."))
             val composeBuilderClassName = screenClassName.nestedClass("ComposeDestinationBuilder")
 
             fileSpec.addType(
                 ScreenClass(
                     screenClassName,
                     idClassName,
-                    screenBaseClassName,
-                    screenBaseClass.isInterface,
                     composeBuilderClassName,
                     annotation.dynamicDeepLinkPrefix,
                     routes,
