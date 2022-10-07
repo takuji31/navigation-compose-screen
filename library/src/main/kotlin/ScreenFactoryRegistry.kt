@@ -10,14 +10,14 @@ object ScreenFactoryRegistry {
         classMap[screenClass] = factory
     }
 
-    fun <T : ScreenFactory<T>> findByRoute(route: String): T {
+    fun <T : ScreenFactory<out Any>> findByRoute(route: String): T {
         @Suppress("UNCHECKED_CAST")
         return routeMap.getOrElse(route) {
             error("Screen factory for route[$route] not registered.")
         } as T
     }
 
-    fun <T : ScreenFactory<T>> findByClass(screenClass: KClass<*>): T {
+    fun <T : ScreenFactory<out Any>> findByClass(screenClass: KClass<*>): T {
         @Suppress("UNCHECKED_CAST")
         return classMap.getOrElse(screenClass) {
             error("Screen factory for class[${screenClass.simpleName}] not registered.")

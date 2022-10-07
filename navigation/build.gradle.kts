@@ -42,7 +42,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 }
 
@@ -50,8 +50,8 @@ dependencies {
     implementation(project(":library"))
     kapt(project(":compiler"))
 
-    implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
-    implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.foundation)
+    implementation(libs.navigation.compose)
 }

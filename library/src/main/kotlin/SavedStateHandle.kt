@@ -17,7 +17,7 @@ class SavedStateHandleScreenPropertyDelegate<T : Screen<*>>(
         return if (savedStateHandle.contains(SavedStateHandleScreenKey)) {
             checkNotNull(savedStateHandle[SavedStateHandleScreenKey]) as T
         } else {
-            val screen = ScreenFactoryRegistry.findByClass<ScreenFactory<*>>(screenClass)
+            val screen = ScreenFactoryRegistry.findByClass<ScreenFactory<T>>(screenClass)
                 .fromSavedStateHandle(savedStateHandle)
             savedStateHandle.set(SavedStateHandleScreenKey, screen)
             screen as T

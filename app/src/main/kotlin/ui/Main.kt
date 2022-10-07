@@ -4,11 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.HiltViewModelFactory
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
 import jp.takuji31.compose.navigation.example.navigation.exampleScreenComposable
@@ -31,12 +27,7 @@ fun Main(navController: ScreenNavController) {
         }
         exampleScreenComposable(deepLinkPrefix = "compose-navigation-example://blog.takuji31.jp") {
             home { screen ->
-                val context = LocalContext.current
-                val navBackStackEntry by navController.navController.currentBackStackEntryAsState()
-                val viewModelFactory = remember(context) {
-                    HiltViewModelFactory(context, checkNotNull(navBackStackEntry))
-                }
-                val viewModel = viewModel<HomeViewModel>(factory = viewModelFactory)
+                val viewModel = hiltViewModel<HomeViewModel>()
                 val state by viewModel.state.collectAsState()
 
                 Home(
@@ -51,12 +42,7 @@ fun Main(navController: ScreenNavController) {
                 )
             }
             blog { screen ->
-                val context = LocalContext.current
-                val navBackStackEntry by navController.navController.currentBackStackEntryAsState()
-                val viewModelFactory = remember(context) {
-                    HiltViewModelFactory(context, checkNotNull(navBackStackEntry))
-                }
-                val viewModel = viewModel<BlogViewModel>(factory = viewModelFactory)
+                val viewModel = hiltViewModel<BlogViewModel>()
                 val state by viewModel.state.collectAsState()
                 Blog(
                     state = state,
@@ -73,12 +59,7 @@ fun Main(navController: ScreenNavController) {
                 )
             }
             entry {
-                val context = LocalContext.current
-                val navBackStackEntry by navController.navController.currentBackStackEntryAsState()
-                val viewModelFactory = remember(context) {
-                    HiltViewModelFactory(context, checkNotNull(navBackStackEntry))
-                }
-                val viewModel = viewModel<EntryViewModel>(factory = viewModelFactory)
+                val viewModel = hiltViewModel<EntryViewModel>()
                 val state by viewModel.state.collectAsState()
                 Entry(
                     state = state,

@@ -1,9 +1,11 @@
 [versions]
 android-plugin = "7.3.0"
+navigation = "2.5.2"
 compose = "1.2.0"
 lifecycle = "2.4.0"
 hilt = "2.44"
 coroutine = "1.6.4"
+kotlinpoet = "1.12.0"
 
 [libraries]
 androidx-core = "androidx.core:core-ktx:1.9.0"
@@ -23,14 +25,19 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 
 activity-compose = "androidx.activity:activity-compose:1.6.0"
-navigation-compose = "androidx.navigation:navigation-compose:${Versions.navigationVersion}"
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-navigation = "androidx.hilt:hilt-navigation:1.0.0"
+hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
 
 timber = "com.jakewharton.timber:timber:5.0.1"
 androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
+
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+kotlinpoet-metadata = { module = "com.squareup:kotlinpoet-metadata", version.ref = "kotlinpoet" }
+
 
 #androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
 #androidTestImplementation("junit:junit:4.13.2")

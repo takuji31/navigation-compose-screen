@@ -42,13 +42,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 }
 
 dependencies {
-    api(project(":common"))
-    api(project(":annotation"))
+    api(projects.common)
+    api(projects.annotation)
     implementation(libs.bundles.coroutines)
 
     implementation(libs.androidx.core)
@@ -56,7 +56,7 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
-    implementation(libs.navigation.compose)
+    api(libs.navigation.compose)
 
     androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
     androidTestImplementation("junit:junit:4.13.2")

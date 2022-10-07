@@ -65,7 +65,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 }
 
@@ -83,7 +83,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    implementation(libs.hilt.navigation)
+    implementation(libs.hilt.navigation.compose)
 
     // For instrumentation tests
     androidTestImplementation(libs.hilt.android.testing)
