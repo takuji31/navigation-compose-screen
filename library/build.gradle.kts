@@ -1,5 +1,6 @@
 plugins {
-    id("com.android.library")
+    @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.android.library)
     kotlin("android")
     `maven-publish`
 }
@@ -38,7 +39,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
     }
 
     composeOptions {
@@ -49,15 +49,14 @@ android {
 dependencies {
     api(project(":common"))
     api(project(":annotation"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.bundles.coroutines)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
+    implementation(libs.androidx.core)
+    implementation(libs.lifecycle.viewmodel)
 
-    implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
-    implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
+    implementation(libs.navigation.compose)
 
     androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
     androidTestImplementation("junit:junit:4.13.2")
@@ -75,9 +74,9 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components.getByName("release"))
 
-                groupId = "com.github.takuji31.navigation-compose-screen"
+                groupId = Publish.groupId
                 artifactId = "navigation-compose-screen"
-                version = "0.10"
+                version = Publish.version
             }
         }
     }

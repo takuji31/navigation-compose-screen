@@ -1,9 +1,11 @@
 plugins {
-    id("com.android.application")
+    @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.android.application)
     kotlin("android")
     kotlin("kapt")
     id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
+    @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -49,7 +51,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
     }
 
     packagingOptions {
@@ -69,39 +70,32 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(libs.bundles.coroutines)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleVersion}")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.6.1")
+    implementation(libs.androidx.core)
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
-    implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
-    implementation("androidx.compose.foundation:foundation:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material:${Versions.composeVersion}")
-    implementation("androidx.compose.material:material-icons-extended:${Versions.composeVersion}")
-    implementation("androidx.navigation:navigation-compose:${Versions.navigationVersion}")
-    implementation("androidx.activity:activity-compose:1.6.0")
+    implementation(libs.bundles.compose)
+    implementation(libs.activity.compose)
 
-    implementation("com.google.dagger:hilt-android:${Versions.hiltVersion}")
-    kapt("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
-    implementation("androidx.hilt:hilt-navigation:1.0.0")
+    implementation(libs.hilt.navigation)
 
     // For instrumentation tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     // For local unit tests
-    testImplementation("com.google.dagger:hilt-android-testing:${Versions.hiltVersion}")
-    kaptTest("com.google.dagger:hilt-android-compiler:${Versions.hiltVersion}")
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
 
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation(libs.androidx.core.testing)
 
 
     implementation(project(":annotation"))
