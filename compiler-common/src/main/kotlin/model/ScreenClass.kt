@@ -13,6 +13,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.UNIT
+import com.squareup.kotlinpoet.asClassName
 import jp.takuji31.compose.navigation.compiler.Bundle
 import jp.takuji31.compose.navigation.compiler.ComposableAnnotation
 import jp.takuji31.compose.navigation.compiler.NavGraphBuilder
@@ -25,12 +26,11 @@ import jp.takuji31.compose.navigation.compiler.composable
 import jp.takuji31.compose.navigation.compiler.dialog
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute.RouteType.Default
 import jp.takuji31.compose.navigation.compiler.model.ScreenRoute.RouteType.Dialog
+import jp.takuji31.compose.navigation.screen.Screen
 
 data class ScreenClass(
     val className: ClassName,
     val enumClassName: ClassName,
-    val screenBaseClassName: ClassName,
-    val screenBaseClassIsInterface: Boolean,
     val composeBuilderClassName: ClassName,
     val dynamicDeepLinkPrefix: Boolean,
     val routes: List<ScreenRoute>,
@@ -41,14 +41,7 @@ data class ScreenClass(
             ParameterSpec.builder("screenId", enumClassName).build()
         val spec = TypeSpec.classBuilder(className)
             .addModifiers(KModifier.SEALED)
-            .apply {
-                val baseTypeName = screenBaseClassName.parameterizedBy(enumClassName)
-                if (screenBaseClassIsInterface) {
-                    addSuperinterface(baseTypeName)
-                } else {
-                    superclass(baseTypeName)
-                }
-            }
+            .addSuperinterface(Screen::class.asClassName().parameterizedBy(enumClassName))
             .addSuperinterface(Parcelable)
             .primaryConstructor(
                 FunSpec.constructorBuilder()
