@@ -112,7 +112,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.ext:truth:1.4.0")
     androidTestImplementation("com.google.truth:truth:1.1.3")
-    androidTestImplementation("androidx.activity:activity-ktx:1.6.0")
+    androidTestImplementation("androidx.activity:activity-ktx:1.6.1")
 }
 
 kapt {
