@@ -1,6 +1,5 @@
 package jp.takuji31.compose.navigation.screen.annotation
 
-import jp.takuji31.compose.navigation.screen.Screen
 import kotlin.reflect.KClass
 
 @Deprecated(
@@ -14,7 +13,6 @@ typealias AutoScreenId = ScreenId
 annotation class ScreenId(
     val screenClassName: String,
     val dynamicDeepLinkPrefix: Boolean = false,
-    val screenBaseClass: KClass<*> = Screen::class,
 )
 
 @Retention(AnnotationRetention.RUNTIME)
