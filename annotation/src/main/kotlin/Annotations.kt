@@ -2,18 +2,18 @@ package jp.takuji31.compose.navigation.screen.annotation
 
 import kotlin.reflect.KClass
 
-@Deprecated(
-    "Renamed to ScreenId",
-    replaceWith = ReplaceWith("jp.takuji31.compose.navigation.screen.annotation.ScreenId"),
-)
-typealias AutoScreenId = ScreenId
-
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class ScreenId(
     val screenClassName: String,
     val dynamicDeepLinkPrefix: Boolean = false,
 )
+
+@Deprecated(
+    "Renamed to ScreenId",
+    replaceWith = ReplaceWith("jp.takuji31.compose.navigation.screen.annotation.ScreenId"),
+)
+typealias AutoScreenId = ScreenId
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
