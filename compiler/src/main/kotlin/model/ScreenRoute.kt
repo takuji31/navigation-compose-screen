@@ -131,7 +131,7 @@ data class ScreenRoute(
         is LongArgument -> Arg.from(this)
         is BooleanArgument -> Arg.from(this)
         is FloatArgument -> Arg.from(this)
-        is EnumArgument -> Arg.from(elements, this)
+        is EnumArgument -> TODO() // Arg.from(elements, this)
         else -> error("unknown annotation $this")
     }
 

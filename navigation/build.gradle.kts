@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("kotlin-parcelize")
+    id("com.google.devtools.ksp") version "1.7.20-1.0.6"
 }
 
 android {
@@ -47,8 +48,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":library"))
-    kapt(project(":compiler"))
+    implementation(projects.library)
+    ksp(projects.compiler)
+
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)

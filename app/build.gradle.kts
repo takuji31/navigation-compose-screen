@@ -6,6 +6,7 @@ plugins {
     id("kotlin-parcelize")
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.dagger.hilt)
+    id("com.google.devtools.ksp") version "1.7.20-1.0.6"
 }
 
 android {
@@ -103,9 +104,10 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
 
 
-    implementation(project(":annotation"))
-    implementation(project(":library"))
-    kapt(project(":compiler"))
+    implementation(projects.annotation)
+    implementation(projects.library)
+    ksp(projects.compiler)
+
 
     // NOTE: Current limitation this library doesn't work correctly in single-module with kapt.correctErrorTypes=true
     implementation(project(":navigation"))

@@ -9,18 +9,13 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
-import com.squareup.kotlinpoet.metadata.KotlinPoetMetadataPreview
-import com.squareup.kotlinpoet.metadata.toKmClass
 import jp.takuji31.compose.navigation.compiler.NavType
 import jp.takuji31.compose.navigation.compiler.navArgument
 import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
-import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
 import jp.takuji31.compose.navigation.screen.annotation.FloatArgument
 import jp.takuji31.compose.navigation.screen.annotation.IntArgument
 import jp.takuji31.compose.navigation.screen.annotation.LongArgument
 import jp.takuji31.compose.navigation.screen.annotation.StringArgument
-import javax.lang.model.type.MirroredTypeException
-import javax.lang.model.util.Elements
 
 data class Arg constructor(
     val type: Type,
@@ -130,31 +125,30 @@ data class Arg constructor(
             floatArgument.defaultValue,
         )
 
-        @OptIn(KotlinPoetMetadataPreview::class)
-        fun from(elements: Elements, enumArgument: EnumArgument): Arg {
-            val kmClass = try {
-                enumArgument.enumClass.toKmClass()
-            } catch (e: MirroredTypeException) {
-                elements.getTypeElement(e.typeMirror.toString()).toKmClass()
-            }
-
-            val defaultValue = enumArgument.defaultValue.takeIf { it != "@null" }
-            val className = kmClass.name.replace("/", ".")
-            if (defaultValue != null) {
-                check(kmClass.enumEntries.any { it == enumArgument.defaultValue }) {
-                    "Enum entry $className.${defaultValue} not found."
-                }
-            }
-
-            return Arg(
-                Type.Enum,
-                enumArgument.name,
-                false,
-                enumArgument.hasDefaultValue,
-                ClassName.bestGuess(className),
-                defaultValue,
-            )
-        }
+//        fun from(elements: Elements, enumArgument: EnumArgument): Arg {
+//            val kmClass = try {
+//                enumArgument.enumClass.toKmClass()
+//            } catch (e: MirroredTypeException) {
+//                elements.getTypeElement(e.typeMirror.toString()).toKmClass()
+//            }
+//
+//            val defaultValue = enumArgument.defaultValue.takeIf { it != "@null" }
+//            val className = kmClass.name.replace("/", ".")
+//            if (defaultValue != null) {
+//                check(kmClass.enumEntries.any { it == enumArgument.defaultValue }) {
+//                    "Enum entry $className.${defaultValue} not found."
+//                }
+//            }
+//
+//            return Arg(
+//                Type.Enum,
+//                enumArgument.name,
+//                false,
+//                enumArgument.hasDefaultValue,
+//                ClassName.bestGuess(className),
+//                defaultValue,
+//            )
+//        }
     }
 
     enum class Type {
