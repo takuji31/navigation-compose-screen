@@ -1,5 +1,9 @@
 package jp.takuji31.compose.navigation.compiler.model
 
+import com.google.devtools.ksp.symbol.ClassKind
+import com.google.devtools.ksp.symbol.KSAnnotation
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSType
 import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -9,7 +13,9 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.ksp.toClassName
 import jp.takuji31.compose.navigation.compiler.NavType
+import jp.takuji31.compose.navigation.compiler.model.Arg.Type.Bool
 import jp.takuji31.compose.navigation.compiler.navArgument
 import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
 import jp.takuji31.compose.navigation.screen.annotation.FloatArgument
@@ -17,6 +23,7 @@ import jp.takuji31.compose.navigation.screen.annotation.IntArgument
 import jp.takuji31.compose.navigation.screen.annotation.LongArgument
 import jp.takuji31.compose.navigation.screen.annotation.StringArgument
 
+// TODO: convert to Visitor
 data class Arg constructor(
     val type: Type,
     val name: String,
@@ -27,6 +34,43 @@ data class Arg constructor(
 ) {
 
     val typeNameWithNullability: TypeName by lazy { typeName.copy(nullable = isNullable) }
+
+    val bundleGetter: CodeBlock by lazy {
+        val codeBlock = if (type == Type.Enum) {
+            CodeBlock.of(
+                "val %1N = bundle.%2M<%3T>(%1S)",
+                name,
+                MemberName("jp.takuji31.compose.navigation.screen", "getEnum"),
+                typeNameWithNullability,
+            ).toBuilder()
+        } else {
+            val typeString = when (type) {
+                Type.String -> "String"
+                Type.Int -> "Int"
+                Type.Long -> "Long"
+                Bool -> "Boolean"
+                Type.Float -> "Float"
+                Type.Enum -> error("does not happen")
+            }
+            CodeBlock.of(
+                "val %1N = bundle.get${typeString}(%1S)",
+                name,
+            ).toBuilder()
+        }
+
+        when {
+            !isNullable && !hasDefaultValue -> {
+                // always not null
+                codeBlock.add("?: error(%S)", "Screen requires parameter: $name")
+            }
+            hasDefaultValue && defaultValue != null -> {
+                // with default value
+                codeBlock.add("?: %L", defaultValueLiteral)
+            }
+        }
+
+        codeBlock.add("\n").build()
+    }
 
     val defaultValueLiteral: CodeBlock by lazy {
         check(hasDefaultValue) { error("$this has no default value") }
@@ -108,7 +152,7 @@ data class Arg constructor(
         )
 
         fun from(booleanArgument: BooleanArgument): Arg = Arg(
-            Type.Bool,
+            Bool,
             booleanArgument.name,
             booleanArgument.isNullable,
             booleanArgument.hasDefaultValue,
@@ -125,30 +169,39 @@ data class Arg constructor(
             floatArgument.defaultValue,
         )
 
-//        fun from(elements: Elements, enumArgument: EnumArgument): Arg {
-//            val kmClass = try {
-//                enumArgument.enumClass.toKmClass()
-//            } catch (e: MirroredTypeException) {
-//                elements.getTypeElement(e.typeMirror.toString()).toKmClass()
-//            }
-//
-//            val defaultValue = enumArgument.defaultValue.takeIf { it != "@null" }
-//            val className = kmClass.name.replace("/", ".")
-//            if (defaultValue != null) {
-//                check(kmClass.enumEntries.any { it == enumArgument.defaultValue }) {
-//                    "Enum entry $className.${defaultValue} not found."
-//                }
-//            }
-//
-//            return Arg(
-//                Type.Enum,
-//                enumArgument.name,
-//                false,
-//                enumArgument.hasDefaultValue,
-//                ClassName.bestGuess(className),
-//                defaultValue,
-//            )
-//        }
+        fun createEnumArg(annotation: KSAnnotation): Arg {
+            val enumClass =
+                annotation.arguments.first { it.name?.asString() == "enumClass" }.value as KSType
+            val classDeclaration = enumClass.declaration as KSClassDeclaration
+
+            val entries = classDeclaration
+                .declarations
+                .filterIsInstance<KSClassDeclaration>()
+                .filter { it.classKind == ClassKind.ENUM_ENTRY }
+
+            val defaultValue =
+                (annotation.arguments.first { it.name?.asString() == "defaultValue" }.value as String).takeIf { it != "@null" }
+            val className = classDeclaration.toClassName()
+            if (defaultValue != null) {
+                check(entries.any { it.simpleName.asString() == defaultValue }) {
+                    "Enum entry $className.${defaultValue} not found."
+                }
+            }
+
+            val name =
+                (annotation.arguments.first { it.name?.asString() == "name" }.value as String)
+            val hasDefaultValue =
+                (annotation.arguments.first { it.name?.asString() == "hasDefaultValue" }.value as Boolean)
+
+            return Arg(
+                Type.Enum,
+                name,
+                false,
+                hasDefaultValue,
+                className,
+                defaultValue,
+            )
+        }
     }
 
     enum class Type {

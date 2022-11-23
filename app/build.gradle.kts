@@ -106,6 +106,7 @@ dependencies {
 
     implementation(projects.annotation)
     implementation(projects.library)
+    testImplementation(projects.compiler)
     ksp(projects.compiler)
 
 
@@ -121,6 +122,10 @@ dependencies {
     androidTestImplementation("androidx.test.ext:truth:1.5.0")
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("androidx.activity:activity-ktx:1.6.1")
+
+    testImplementation(libs.kotlin.compile.testing.ksp)
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
 }
 
 kapt {

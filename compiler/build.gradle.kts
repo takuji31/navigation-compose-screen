@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.kotlinpoet)
     implementation(libs.kotlinpoet.ksp)
 
-    testImplementation("com.github.tschuchortdev:kotlin-compile-testing-ksp:1.4.9")
+    testImplementation(libs.kotlin.compile.testing.ksp)
     testImplementation(libs.junit)
     testImplementation(libs.truth)
 }

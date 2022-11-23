@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 annotation class ScreenId(
     val screenClassName: String,
     val dynamicDeepLinkPrefix: Boolean = false,
+    val disableParcelize: Boolean = false,
 )
 
 @Deprecated(
@@ -19,6 +20,7 @@ typealias AutoScreenId = ScreenId
 @Target(AnnotationTarget.FIELD)
 annotation class Route(
     val route: String,
+    val type: RouteType = RouteType.Default,
     val deepLinks: Array<String> = [],
     val stringArguments: Array<StringArgument> = [],
     val intArguments: Array<IntArgument> = [],
@@ -28,18 +30,9 @@ annotation class Route(
     val enumArguments: Array<EnumArgument> = [],
 )
 
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD)
-annotation class DialogRoute(
-    val route: String,
-    val deepLinks: Array<String> = [],
-    val stringArguments: Array<StringArgument> = [],
-    val intArguments: Array<IntArgument> = [],
-    val longArguments: Array<LongArgument> = [],
-    val booleanArguments: Array<BooleanArgument> = [],
-    val floatArguments: Array<FloatArgument> = [],
-    val enumArguments: Array<EnumArgument> = [],
-)
+enum class RouteType {
+    Default, Dialog
+}
 
 /**
  * [String] argument annotation.
