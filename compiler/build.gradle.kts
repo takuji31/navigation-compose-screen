@@ -22,7 +22,7 @@ dependencies {
     implementation("com.google.auto.service:auto-service:1.0.1")
     kapt("com.google.auto.service:auto-service:1.0.1")
     compileOnly("net.ltgt.gradle.incap:incap:0.3")
-    kapt("net.ltgt.gradle.incap:incap-processor:0.3")
+    kapt("net.ltgt.gradle.incap:incap-processor:1.0.0")
 }
 
 publishing {
