@@ -33,7 +33,7 @@ hilt-navigation = "androidx.hilt:hilt-navigation:1.0.0"
 hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
 
 timber = "com.jakewharton.timber:timber:5.0.1"
-androidx-core-testing = "androidx.arch.core:core-testing:2.1.0"
+androidx-core-testing = "androidx.arch.core:core-testing:2.2.0"
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-metadata = { module = "com.squareup:kotlinpoet-metadata", version.ref = "kotlinpoet" }
