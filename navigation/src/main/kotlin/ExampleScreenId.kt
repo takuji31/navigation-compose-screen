@@ -1,13 +1,13 @@
 package jp.takuji31.compose.navigation.example.navigation
 
-import jp.takuji31.compose.navigation.screen.annotation.AutoScreenId
 import jp.takuji31.compose.navigation.screen.annotation.BooleanArgument
-import jp.takuji31.compose.navigation.screen.annotation.DialogRoute
 import jp.takuji31.compose.navigation.screen.annotation.EnumArgument
 import jp.takuji31.compose.navigation.screen.annotation.Route
+import jp.takuji31.compose.navigation.screen.annotation.RouteType
+import jp.takuji31.compose.navigation.screen.annotation.ScreenId
 import jp.takuji31.compose.navigation.screen.annotation.StringArgument
 
-@AutoScreenId(
+@ScreenId(
     "ExampleScreen",
     dynamicDeepLinkPrefix = true,
 )
@@ -52,7 +52,7 @@ enum class ExampleScreenId {
     @Route("/settings")
     Settings,
 
-    @DialogRoute("/about")
+    @Route("/about", RouteType.Dialog)
     About,
 }
 

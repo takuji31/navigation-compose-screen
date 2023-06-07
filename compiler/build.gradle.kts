@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `java-library`
-    kotlin("kapt")
     `maven-publish`
 }
 
@@ -14,15 +13,15 @@ tasks.withType<KotlinCompile> {
 dependencies {
     implementation(projects.annotation)
     implementation(projects.common)
-    implementation(projects.compilerCommon)
-    implementation("com.google.auto:auto-common:1.2.1")
+
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.7.20-1.0.8")
+
     implementation(libs.kotlinpoet)
-    implementation(libs.kotlinpoet.metadata)
-    @Suppress("AnnotationProcessorOnCompilePath")
-    implementation("com.google.auto.service:auto-service:1.0.1")
-    kapt("com.google.auto.service:auto-service:1.0.1")
-    compileOnly("net.ltgt.gradle.incap:incap:0.3")
-    kapt("net.ltgt.gradle.incap:incap-processor:0.3")
+    implementation(libs.kotlinpoet.ksp)
+
+    testImplementation(libs.kotlin.compile.testing.ksp)
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
 }
 
 publishing {

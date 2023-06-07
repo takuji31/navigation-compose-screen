@@ -8,7 +8,7 @@ val String.mayBeCamelCase: Boolean get() = camelCasePattern.matches(this)
 fun String.toCamelCase() = if (contains("_")) {
     split("_").joinToString("") {
         it.first().uppercaseChar() + it.drop(1).lowercase(
-            Locale.getDefault()
+            Locale.getDefault(),
         )
     }
 } else if (!mayBeCamelCase) {

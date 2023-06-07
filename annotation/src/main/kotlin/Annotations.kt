@@ -1,20 +1,26 @@
 package jp.takuji31.compose.navigation.screen.annotation
 
-import jp.takuji31.compose.navigation.screen.Screen
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class AutoScreenId(
+annotation class ScreenId(
     val screenClassName: String,
     val dynamicDeepLinkPrefix: Boolean = false,
-    val screenBaseClass: KClass<*> = Screen::class,
+    val disableParcelize: Boolean = false,
 )
+
+@Deprecated(
+    "Renamed to ScreenId",
+    replaceWith = ReplaceWith("jp.takuji31.compose.navigation.screen.annotation.ScreenId"),
+)
+typealias AutoScreenId = ScreenId
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
 annotation class Route(
     val route: String,
+    val type: RouteType = RouteType.Default,
     val deepLinks: Array<String> = [],
     val stringArguments: Array<StringArgument> = [],
     val intArguments: Array<IntArgument> = [],
@@ -24,18 +30,9 @@ annotation class Route(
     val enumArguments: Array<EnumArgument> = [],
 )
 
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.FIELD)
-annotation class DialogRoute(
-    val route: String,
-    val deepLinks: Array<String> = [],
-    val stringArguments: Array<StringArgument> = [],
-    val intArguments: Array<IntArgument> = [],
-    val longArguments: Array<LongArgument> = [],
-    val booleanArguments: Array<BooleanArgument> = [],
-    val floatArguments: Array<FloatArgument> = [],
-    val enumArguments: Array<EnumArgument> = [],
-)
+enum class RouteType {
+    Default, Dialog
+}
 
 /**
  * [String] argument annotation.

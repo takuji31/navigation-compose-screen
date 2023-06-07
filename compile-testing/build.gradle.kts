@@ -1,9 +1,8 @@
 plugins {
-    id("com.android.library")
+    @Suppress("DSL_SCOPE_VIOLATION")
+    alias(libs.plugins.android.library)
     kotlin("android")
-    kotlin("kapt")
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "1.7.20-1.0.6"
 }
 
 android {
@@ -12,6 +11,8 @@ android {
     defaultConfig {
         minSdk = 23
         targetSdk = Versions.sdk
+
+        namespace = "jp.takuji31.compose.navigation.compile.testing"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,12 +50,12 @@ android {
 
 dependencies {
     implementation(projects.library)
-    ksp(projects.compiler)
 
-
-    implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
-    implementation(libs.navigation.compose)
-    debugImplementation(libs.compose.ui.tooling)
+
+    testImplementation(libs.kotlin.compile.testing.ksp)
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(projects.compiler)
 }
