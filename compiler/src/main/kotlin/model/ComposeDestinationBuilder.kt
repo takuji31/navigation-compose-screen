@@ -69,7 +69,7 @@ data class ComposeDestinationBuilder(
                 ScreenFactoryRegistry,
                 ScreenFactoryRegistry.member("register"),
                 screenRoute.route,
-                baseClassName,
+                routeClassName,
                 routeClassName,
             )
         }
