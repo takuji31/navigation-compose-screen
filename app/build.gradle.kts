@@ -77,8 +77,13 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
 
-    implementation(libs.bundles.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.activity.compose)
+    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -105,7 +110,8 @@ dependencies {
     // NOTE: Current limitation this library doesn't work correctly in single-module with kapt.correctErrorTypes=true
     implementation(project(":navigation"))
 
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test)
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test:runner:1.5.2")

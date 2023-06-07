@@ -54,11 +54,13 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.lifecycle.viewmodel)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
     api(libs.navigation.compose)
 
-    androidTestImplementation("androidx.compose.ui:ui-test:${Versions.composeVersion}")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test)
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test:runner:1.5.2")
