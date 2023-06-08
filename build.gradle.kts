@@ -15,12 +15,14 @@ tasks.create<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
-/**
- * https://github.com/google/ksp/issues/1288
- */
-tasks.withType<KotlinCompile>()
-    .configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
+subprojects {
+    /**
+     * https://github.com/google/ksp/issues/1288
+     */
+    tasks.withType<KotlinCompile>()
+        .configureEach {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_11.toString()
+            }
         }
-    }
+}
