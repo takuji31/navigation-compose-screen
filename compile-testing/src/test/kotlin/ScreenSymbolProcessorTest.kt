@@ -20,6 +20,7 @@ class ScreenSymbolProcessorTest {
             inheritClassPath = true
             symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
             kspWithCompilation = true
+            jvmTarget = "11"
         }
         val result = compilation.compile()
         expect
@@ -42,6 +43,7 @@ class ScreenSymbolProcessorTest {
             inheritClassPath = true
             symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
             kspWithCompilation = true
+            jvmTarget = "11"
         }
         val result = compilation.compile()
         expect
@@ -50,6 +52,52 @@ class ScreenSymbolProcessorTest {
 
         val files = compilation.kspSourcesDir.walkTopDown()
             .filter { it.name == "EnumScreen.kt" }
+            .toList()
+
+        expect
+            .that(files)
+            .isNotEmpty()
+    }
+
+    @Test
+    fun dynamicDeeplinkPrefix() {
+        val compilation = KotlinCompilation().apply {
+            sources = listOf(sourceWithDynamicDeepLinkPrefix)
+            inheritClassPath = true
+            symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
+            kspWithCompilation = true
+            jvmTarget = "11"
+        }
+        val result = compilation.compile()
+        expect
+            .that(result.exitCode)
+            .isEqualTo(KotlinCompilation.ExitCode.OK)
+
+        val files = compilation.kspSourcesDir.walkTopDown()
+            .filter { it.name == "TestingScreen.kt" }
+            .toList()
+
+        expect
+            .that(files)
+            .isNotEmpty()
+    }
+
+    @Test
+    fun screenClassNameSameWithEnumMember() {
+        val compilation = KotlinCompilation().apply {
+            sources = listOf(sourceWithScreenClassNameSameWithEnumMember)
+            inheritClassPath = true
+            symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
+            kspWithCompilation = true
+            jvmTarget = "11"
+        }
+        val result = compilation.compile()
+        expect
+            .that(result.exitCode)
+            .isEqualTo(KotlinCompilation.ExitCode.OK)
+
+        val files = compilation.kspSourcesDir.walkTopDown()
+            .filter { it.name == "Home.kt" }
             .toList()
 
         expect
@@ -95,6 +143,37 @@ class ScreenSymbolProcessorTest {
             enum class EnumScreenId {
                 @Route("/{enumArg}", enumArguments = [EnumArgument(name = "enumArg", enumClass = EnumArg::class)])
                 EnumArgRoute,
+            }
+        """.trimIndent(),
+        )
+        val sourceWithDynamicDeepLinkPrefix = SourceFile.kotlin(
+            "DynamicDeepLinkPrefix.kt",
+            """
+            package jp.takuji31.compose.navigation
+
+            import jp.takuji31.compose.navigation.screen.annotation.Route
+            import jp.takuji31.compose.navigation.screen.annotation.ScreenId
+
+            @ScreenId("TestingScreen", disableParcelize = true, dynamicDeepLinkPrefix = true)
+            enum class TestingScreenId {
+                @Route("/")
+                Home,
+            }
+        """.trimIndent(),
+        )
+
+        val sourceWithScreenClassNameSameWithEnumMember = SourceFile.kotlin(
+            "DynamicDeepLinkPrefix.kt",
+            """
+            package jp.takuji31.compose.navigation
+
+            import jp.takuji31.compose.navigation.screen.annotation.Route
+            import jp.takuji31.compose.navigation.screen.annotation.ScreenId
+
+            @ScreenId("Home", disableParcelize = true)
+            enum class TestingScreenId {
+                @Route("/")
+                Home,
             }
         """.trimIndent(),
         )
