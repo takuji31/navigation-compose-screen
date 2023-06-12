@@ -5,7 +5,6 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.LambdaTypeName
-import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.PropertySpec
@@ -96,22 +95,20 @@ data class ComposeDestinationBuilder(
 
             if (dynamicDeepLinkPrefix) {
                 codeBlock.addStatement(
-                    "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks(%5N)) {",
+                    "%1N.%2M(%3L.route, %3L.navArgs, %3L.deepLinks(%4N)) {",
                     navGraphBuilder,
                     when (route.type) {
                         RouteType.Default -> composable
                         RouteType.Dialog -> dialog
                     },
-                    enumClassName,
-                    MemberName(enumClassName, route.name),
+                    enumClassName.member(route.name),
                     deepLinkPrefixName,
                 )
             } else {
                 codeBlock.addStatement(
-                    "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks()) {",
+                    "%1N.%2M(%3L.route, %3L.navArgs, %3L.deepLinks()) {",
                     navGraphBuilder,
                     composable,
-                    enumClassName,
                     enumClassName.member(route.name),
                 )
             }
