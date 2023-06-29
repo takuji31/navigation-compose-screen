@@ -110,7 +110,10 @@ data class ComposeDestinationBuilder(
                 codeBlock.addStatement(
                     "%1N.%2M(%3T.%4M.route, %3T.%4M.navArgs, %3T.%4M.deepLinks()) {",
                     navGraphBuilder,
-                    composable,
+                    when (route.type) {
+                        RouteType.Default -> composable
+                        RouteType.Dialog -> dialog
+                    },
                     enumClassName,
                     enumClassName.member(route.name),
                 )

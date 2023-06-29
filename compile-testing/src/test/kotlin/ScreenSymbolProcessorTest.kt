@@ -57,6 +57,49 @@ class ScreenSymbolProcessorTest {
             .isNotEmpty()
     }
 
+    @Test
+    fun dialogRoute() {
+        val compilation = KotlinCompilation().apply {
+            sources = listOf(sourceWithDialogRouteType)
+            inheritClassPath = true
+            symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
+            kspWithCompilation = true
+        }
+        val result = compilation.compile()
+        expect
+            .that(result.exitCode)
+            .isEqualTo(KotlinCompilation.ExitCode.OK)
+
+        val files = compilation.kspSourcesDir.walkTopDown()
+            .filter { it.name == "TestingScreen.kt" }
+            .toList()
+
+        expect
+            .that(files.first().readText()).contains("navGraphBuilder.dialog")
+    }
+
+    @Test
+    fun dialogRouteWithDeepLinkPrefix() {
+        val compilation = KotlinCompilation().apply {
+            sources = listOf(sourceWithDialogRouteTypeAndDeepLinkPrefix)
+            inheritClassPath = true
+            symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
+            kspWithCompilation = true
+        }
+        val result = compilation.compile()
+        expect
+            .that(result.exitCode)
+            .isEqualTo(KotlinCompilation.ExitCode.OK)
+
+        val files = compilation.kspSourcesDir.walkTopDown()
+            .filter { it.name == "TestingScreen.kt" }
+            .toList()
+
+        expect
+            .that(files.first().readText())
+            .contains("navGraphBuilder.dialog")
+    }
+
     companion object {
         val source = SourceFile.kotlin(
             "TestScreenId.kt",
@@ -95,6 +138,38 @@ class ScreenSymbolProcessorTest {
             enum class EnumScreenId {
                 @Route("/{enumArg}", enumArguments = [EnumArgument(name = "enumArg", enumClass = EnumArg::class)])
                 EnumArgRoute,
+            }
+        """.trimIndent(),
+        )
+        val sourceWithDialogRouteType = SourceFile.kotlin(
+            "TestScreenId.kt",
+            """
+            package jp.takuji31.compose.navigation
+
+            import jp.takuji31.compose.navigation.screen.annotation.Route
+            import jp.takuji31.compose.navigation.screen.annotation.RouteType
+            import jp.takuji31.compose.navigation.screen.annotation.ScreenId
+
+            @ScreenId("TestingScreen", dynamicDeepLinkPrefix = false, disableParcelize = true)
+            enum class TestingScreenId {
+                @Route("/", RouteType.Dialog)
+                Home,
+            }
+        """.trimIndent(),
+        )
+        val sourceWithDialogRouteTypeAndDeepLinkPrefix = SourceFile.kotlin(
+            "TestScreenId.kt",
+            """
+            package jp.takuji31.compose.navigation
+
+            import jp.takuji31.compose.navigation.screen.annotation.Route
+            import jp.takuji31.compose.navigation.screen.annotation.RouteType
+            import jp.takuji31.compose.navigation.screen.annotation.ScreenId
+
+            @ScreenId("TestingScreen", dynamicDeepLinkPrefix = true, disableParcelize = true)
+            enum class TestingScreenId {
+                @Route("/", RouteType.Dialog)
+                Home,
             }
         """.trimIndent(),
         )
