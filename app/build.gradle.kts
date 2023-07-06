@@ -6,7 +6,7 @@ plugins {
     id("kotlin-parcelize")
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.dagger.hilt)
-    id("com.google.devtools.ksp") version "1.8.21-1.0.11"
+    id("com.google.devtools.ksp") version "1.9.0-1.0.11"
 }
 
 android {
