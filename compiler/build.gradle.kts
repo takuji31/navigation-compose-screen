@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.annotation)
     implementation(projects.common)
 
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.8.21-1.0.11")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.10-1.0.13")
 
     implementation(libs.kotlinpoet)
     implementation(libs.kotlinpoet.ksp)
