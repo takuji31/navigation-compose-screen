@@ -1,4 +1,5 @@
 object Versions {
-    const val sdk = 33
+    const val targetSdk = 33
+    const val compileSdk = 34
     const val composeVersion = "1.0.3"
 }
