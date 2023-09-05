@@ -57,7 +57,6 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
-    implementation(libs.compose.foundation)
     api(libs.navigation.compose)
 
     androidTestImplementation(platform(libs.compose.bom))
