@@ -10,6 +10,7 @@ plugins {
 }
 
 android {
+    namespace = "jp.takuji31.compose.navigation.example"
     compileSdk = Versions.compileSdk
 
     defaultConfig {
