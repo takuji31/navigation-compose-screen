@@ -9,11 +9,11 @@ import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class ScreenNavController(val navController: NavHostController) {
     private val _currentScreen = MutableStateFlow<Screen<Enum<*>>?>(null)
-    val currentScreen: StateFlow<Screen<Enum<*>>?>
-        get() = _currentScreen
+    val currentScreen: StateFlow<Screen<Enum<*>>?> = _currentScreen.asStateFlow()
 
     init {
         navController.addOnDestinationChangedListener { _, destination, args ->
