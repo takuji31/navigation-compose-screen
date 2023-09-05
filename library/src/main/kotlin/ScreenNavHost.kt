@@ -14,7 +14,7 @@ fun ScreenNavHost(
 ) {
     NavHost(
         navController = navController.navController,
-        startDestination = startScreen.parameterizedRoute,
+        startDestination = startScreen.route,
         builder = builder,
         modifier = modifier,
     )
