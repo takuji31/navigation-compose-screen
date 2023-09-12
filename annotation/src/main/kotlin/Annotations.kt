@@ -31,7 +31,7 @@ annotation class Route(
 )
 
 enum class RouteType {
-    Default, Dialog
+    Default, Dialog, NestedGraph
 }
 
 /**

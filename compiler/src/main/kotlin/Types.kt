@@ -21,6 +21,7 @@ val ComposableAnnotation =
     AnnotationSpec.builder(ClassName.bestGuess("androidx.compose.runtime.Composable")).build()
 val composable = MemberName("androidx.navigation.compose", "composable")
 val dialog = MemberName("androidx.navigation.compose", "dialog")
+val navigation = MemberName("androidx.navigation.compose", "navigation")
 // endregion
 
 // region Parcelable
