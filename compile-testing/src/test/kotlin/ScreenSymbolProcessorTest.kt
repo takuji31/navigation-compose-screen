@@ -100,6 +100,29 @@ class ScreenSymbolProcessorTest {
             .contains("navGraphBuilder.dialog")
     }
 
+    @Test
+    fun nestedGraph() {
+        val compilation = KotlinCompilation().apply {
+            sources = listOf(sourceWithNestedGraph)
+            inheritClassPath = true
+            symbolProcessorProviders = listOf(ScreenSymbolProcessorProvider())
+            kspWithCompilation = true
+            jvmTarget = "11"
+        }
+        val result = compilation.compile()
+        expect
+            .that(result.exitCode)
+            .isEqualTo(KotlinCompilation.ExitCode.OK)
+
+        val files = compilation.kspSourcesDir.walkTopDown()
+            .filter { it.name == "NestedGraphTesting.kt" }
+            .toList()
+
+        expect
+            .that(files)
+            .isNotEmpty()
+    }
+
     companion object {
         val source = SourceFile.kotlin(
             "TestScreenId.kt",
@@ -172,6 +195,25 @@ class ScreenSymbolProcessorTest {
                 Home,
             }
         """.trimIndent(),
-        )
+
+            )
+
+        val sourceWithNestedGraph = SourceFile.kotlin(
+            "NestedGraph.kt",
+            """
+            package jp.takuji31.compose.navigation
+
+            import jp.takuji31.compose.navigation.screen.annotation.Route
+            import jp.takuji31.compose.navigation.screen.annotation.ScreenId
+            import jp.takuji31.compose.navigation.screen.annotation.RouteType
+
+            @ScreenId("NestedGraphTesting", disableParcelize = true)
+            enum class NestedGraphTestingScreenId {
+                @Route("/", type = RouteType.NestedGraph)
+                NestedGraph,
+            }
+        """.trimIndent(),
+
+            )
     }
 }
