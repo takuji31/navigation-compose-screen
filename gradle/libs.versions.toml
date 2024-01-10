@@ -1,7 +1,7 @@
 [versions]
 android-plugin = "8.1.1"
 navigation = "2.7.1"
-lifecycle = "2.6.1"
+lifecycle = "2.7.0"
 hilt = "2.46.1"
 coroutine = "1.7.3"
 kotlinpoet = "1.14.2"
