@@ -22,6 +22,7 @@ annotation class Route(
     val route: String,
     val type: RouteType = RouteType.Default,
     val deepLinks: Array<String> = [],
+    val constructorAsInternal: Boolean = false,
     val stringArguments: Array<StringArgument> = [],
     val intArguments: Array<IntArgument> = [],
     val longArguments: Array<LongArgument> = [],
