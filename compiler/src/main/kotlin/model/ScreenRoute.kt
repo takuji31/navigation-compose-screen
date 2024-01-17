@@ -99,6 +99,7 @@ sealed class ScreenRouteClass {
         override val routeType: RouteType,
         override val route: String,
         override val deepLinks: List<String>,
+        private val constructorAsInternal: Boolean,
         private val enumClassName: ClassName,
         private val argumentArgs: Set<Arg>,
     ) : ScreenRouteClass() {
@@ -135,7 +136,9 @@ sealed class ScreenRouteClass {
                     }
                 }.build()
             }
-            constructor.addParameters(constructorParameters)
+            constructor
+                .addParameters(constructorParameters)
+                .apply { if (constructorAsInternal) addModifiers(KModifier.INTERNAL) }
 
             val properties = compiledArgs.map { navArgument ->
                 PropertySpec.builder(navArgument.name, navArgument.typeNameWithNullability)
@@ -375,6 +378,7 @@ sealed class ScreenRouteClass {
                     routeAnnotation.type,
                     routeAnnotation.route,
                     routeAnnotation.deepLinks.toList(),
+                    routeAnnotation.constructorAsInternal,
                     enumClassName,
                     args.toSet(),
                 )

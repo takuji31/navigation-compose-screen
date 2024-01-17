@@ -5,9 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.takuji31.compose.navigation.example.navigation.ExampleBlogId
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
+import jp.takuji31.compose.navigation.example.navigation.ExampleScreen.Blog
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
 import jp.takuji31.compose.navigation.example.navigation.exampleScreenComposable
+import jp.takuji31.compose.navigation.example.navigation.invoke
 import jp.takuji31.compose.navigation.example.navigation.popUpTo
 import jp.takuji31.compose.navigation.screen.ScreenNavController
 import jp.takuji31.compose.navigation.screen.ScreenNavHost
@@ -38,7 +41,7 @@ fun Main(navController: ScreenNavController) {
                     onReloadButtonClick = { viewModel.reload() },
                     onSettingsButtonClick = { navController.navigate(ExampleScreen.Settings) },
                     onAboutClick = { navController.navigate(ExampleScreen.About) },
-                    onItemClick = { navController.navigate(ExampleScreen.Blog(it.id)) },
+                    onItemClick = { navController.navigate(Blog.invoke(id = ExampleBlogId(it.id))) },
                 )
             }
             blog { screen ->
