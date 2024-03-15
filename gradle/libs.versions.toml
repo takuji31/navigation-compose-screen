@@ -12,7 +12,6 @@ appcompat = "androidx.appcompat:appcompat:1.6.1"
 material = "com.google.android.material:material:1.9.0"
 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycle" }
 
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutine" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutine" }
@@ -55,7 +54,7 @@ kotlin-compile-testing-ksp = "com.github.tschuchortdev:kotlin-compile-testing-ks
 
 
 [bundles]
-lifecycle = ["lifecycle-viewmodel", "lifecycle-common-java8"]
+lifecycle = ["lifecycle-viewmodel"]
 coroutines = ["kotlin-coroutines-core", "kotlin-coroutines-android"]
 
 [plugins]
