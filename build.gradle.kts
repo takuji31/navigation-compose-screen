@@ -1,14 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.android.application) apply false
-    @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.android.library) apply false
-    @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.kotlin) apply false
-    @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.dagger.hilt) apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 tasks.create<Delete>("clean") {
