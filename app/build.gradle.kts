@@ -121,7 +121,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.ext:truth:1.5.0")
-    androidTestImplementation("com.google.truth:truth:1.1.5")
+    androidTestImplementation("com.google.truth:truth:1.4.2")
     androidTestImplementation("androidx.activity:activity-ktx:1.8.2")
 
     testImplementation(libs.kotlin.compile.testing.ksp)

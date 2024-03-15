@@ -40,7 +40,7 @@ kotlinpoet-metadata = { module = "com.squareup:kotlinpoet-metadata", version.ref
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 
 junit = "junit:junit:4.13.2"
-truth = "com.google.truth:truth:1.1.5"
+truth = "com.google.truth:truth:1.4.2"
 kotlin-compile-testing-ksp = "com.github.tschuchortdev:kotlin-compile-testing-ksp:1.5.0"
 
 
