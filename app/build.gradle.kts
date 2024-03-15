@@ -2,7 +2,6 @@ plugins {
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.android.application)
     kotlin("android")
-    kotlin("kapt")
     id("kotlin-parcelize")
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.dagger.hilt)
@@ -88,17 +87,17 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.hilt.navigation.compose)
 
     // For instrumentation tests
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
-    kaptTest(libs.hilt.android.compiler)
+    kspTest(libs.hilt.android.compiler)
 
     implementation(libs.timber)
 
@@ -127,8 +126,4 @@ dependencies {
     testImplementation(libs.kotlin.compile.testing.ksp)
     testImplementation(libs.junit)
     testImplementation(libs.truth)
-}
-
-kapt {
-    correctErrorTypes = true
 }
