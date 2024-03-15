@@ -6,7 +6,7 @@ plugins {
     id("kotlin-parcelize")
     @Suppress("DSL_SCOPE_VIOLATION")
     alias(libs.plugins.dagger.hilt)
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -67,7 +67,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 }
 
