@@ -29,8 +29,8 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-hilt-navigation = "androidx.hilt:hilt-navigation:1.0.0"
-hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
+hilt-navigation = "androidx.hilt:hilt-navigation:1.2.0"
+hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.2.0"
 
 timber = "com.jakewharton.timber:timber:5.0.1"
 androidx-core-testing = "androidx.arch.core:core-testing:2.2.0"
