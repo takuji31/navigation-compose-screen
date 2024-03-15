@@ -1,6 +1,6 @@
 [versions]
 android-plugin = "8.3.0"
-navigation = "2.7.1"
+navigation = "2.7.7"
 lifecycle = "2.7.0"
 hilt = "2.46.1"
 coroutine = "1.7.3"
