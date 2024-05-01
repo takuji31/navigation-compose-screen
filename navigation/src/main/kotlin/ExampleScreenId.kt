@@ -30,6 +30,7 @@ enum class ExampleScreenId {
         "/blog/{blogId}",
         stringArguments = [StringArgument("blogId")],
         deepLinks = ["/blog/{blogId}"],
+        constructorAsInternal = true
     )
     Blog,
 
@@ -59,5 +60,12 @@ enum class ExampleScreenId {
 @Suppress("EnumEntryName")
 enum class RankingType {
     daily, monthly, total
+}
+
+data class ExampleBlogId(val rawValue: String)
+
+// Type-safe invocation due to constructorAsInternal = true
+operator fun ExampleScreen.Blog.Companion.invoke(id: ExampleBlogId): ExampleScreen.Blog {
+    return ExampleScreen.Blog(id.rawValue)
 }
 
