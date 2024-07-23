@@ -5,7 +5,7 @@ lifecycle = "2.7.0"
 hilt = "2.51"
 coroutine = "1.7.3"
 kotlinpoet = "1.14.2"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.25-1.0.20"
 
 [libraries]
 androidx-core = "androidx.core:core-ktx:1.12.0"
