@@ -70,7 +70,7 @@ fun Main(navController: ScreenNavController) { // val navController = rememberSc
     ) {
         val onBottomSheetItemClicked: (ExampleScreen) -> Unit = { screen ->
             navController.navigate(screen) {
-                popUpTo(ExampleScreenId.Home) { inclusive = screen == ExampleScreen.Home }
+                popUpToScreenId(ExampleScreenId.Home) { inclusive = screen == ExampleScreen.Home }
             }
         }
         exampleScreenComposable {
