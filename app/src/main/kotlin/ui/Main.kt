@@ -8,7 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreen
 import jp.takuji31.compose.navigation.example.navigation.ExampleScreenId
 import jp.takuji31.compose.navigation.example.navigation.exampleScreenComposable
-import jp.takuji31.compose.navigation.example.navigation.popUpTo
+import jp.takuji31.compose.navigation.example.navigation.popUpToScreenId
 import jp.takuji31.compose.navigation.screen.ScreenNavController
 import jp.takuji31.compose.navigation.screen.ScreenNavHost
 
@@ -22,7 +22,7 @@ fun Main(navController: ScreenNavController) {
     ) {
         val onBottomSheetItemClicked: (ExampleScreen) -> Unit = { screen ->
             navController.navigate(screen) {
-                popUpTo(ExampleScreenId.Home) { inclusive = screen is ExampleScreen.Home }
+                popUpToScreenId(ExampleScreenId.Home) { inclusive = screen is ExampleScreen.Home }
             }
         }
         exampleScreenComposable(deepLinkPrefix = "compose-navigation-example://blog.takuji31.jp") {
