@@ -63,6 +63,6 @@ coroutines = ["kotlin-coroutines-core", "kotlin-coroutines-android"]
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-plugin" }
-kotlin = { id = "org.jetbrains.kotlin.android", version = "1.9.22" }
+kotlin = { id = "org.jetbrains.kotlin.android", version = "1.9.25" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
